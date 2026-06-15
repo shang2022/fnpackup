@@ -3,6 +3,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace fnpackup.Controllers
 {
@@ -79,8 +80,9 @@ namespace fnpackup.Controllers
         }
         [HttpPost]
         [Route("/project/pack")]
-        public async Task<List<PackResultInfo>> Pack(string name,string uspace = "", string platform = "", string server = "app/server")
+        public async Task<List<PackResultInfo>> Pack(string name, string uspace = "", string platform = "", string server = "app/server")
         {
+            CheckWizard(name);
             Dictionary<string, string> manifest = await GetManifest(name).ConfigureAwait(false);
             if (manifest.ContainsKey("platform") == false)
             {
@@ -148,7 +150,7 @@ namespace fnpackup.Controllers
             System.IO.File.Move(Path.Join(root, name, $"{appname}.fpk"), Path.Join(root, name, $"{newName}.fpk"), true);
 
 
-            if(uspace == "true" && OperatingSystem.IsLinux())
+            if (uspace == "true" && OperatingSystem.IsLinux())
             {
                 string userSpace = "/user-space/fnpackup-docker";
                 if (Directory.Exists(userSpace) == false)
@@ -219,6 +221,23 @@ namespace fnpackup.Controllers
                 CopyDir(directory, destSubDir);
             }
         }
+        private void CheckWizard(string name)
+        {
+            foreach (var item in Directory.GetFiles(Path.Join(root, name, "wizard")))
+            {
+                try
+                {
+                    string txt = System.IO.File.ReadAllText(item);
+                    if (string.IsNullOrWhiteSpace(txt) || System.IO.File.ReadAllText(item) == "[]")
+                    {
+                        System.IO.File.Delete(item);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
         private async Task<Dictionary<string, string>> GetManifest(string name)
         {
             string str = await System.IO.File.ReadAllTextAsync(Path.Join(root, name, "manifest")).ConfigureAwait(false);
@@ -233,7 +252,7 @@ namespace fnpackup.Controllers
                 }
                 return new string[] { key, value };
 
-            }).Where(c => string.IsNullOrWhiteSpace(c[0])==false).ToDictionary(k => k[0].Trim(), v => v.Length > 1 ? v[1].Trim() : string.Empty);
+            }).Where(c => string.IsNullOrWhiteSpace(c[0]) == false).ToDictionary(k => k[0].Trim(), v => v.Length > 1 ? v[1].Trim() : string.Empty);
         }
         private async Task WritePlatform(string name, Dictionary<string, string> dic)
         {
@@ -598,7 +617,7 @@ namespace fnpackup.Controllers
         {
             try
             {
-                string host =  $"{Request.Scheme}://localhost:{Environment.GetEnvironmentVariable("FNOS_HTTP_PORT")}/";
+                string host = $"{Request.Scheme}://localhost:{Environment.GetEnvironmentVariable("FNOS_HTTP_PORT")}/";
 #if DEBUG
                 host = $"http://192.168.1.82:5666/";
 #endif
