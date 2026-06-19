@@ -6,7 +6,7 @@
             "type": "iframe",
             "protocol": "http",
             "port": "",
-            "url": "/cgi/ThirdParty/fnpackup/proxy.cgi/",
+            "url": "/cgi/ThirdParty/fnpackup/index.cgi/",
             "allUsers": true
         }
     }

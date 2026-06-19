@@ -179,8 +179,8 @@ export default {
         const loadIcon = () => { 
             const url = process.env.NODE_ENV==='development' 
                 ? `http://localhost:1069/file/img?path=${props.path}&t=${state.version}`
-                :  window.location.href.indexOf('proxy.cgi')>=0 
-                ? `/cgi/ThirdParty/fnpackup/proxy.cgi/file/img?path=${props.path}&t=${state.version}`
+                :  window.location.href.indexOf('index.cgi')>=0 
+                ? `/cgi/ThirdParty/fnpackup/index.cgi/file/img?path=${props.path}&t=${state.version}`
                 :`/file/img?path=${props.path}&t=${state.version}`;
 
             const image = new Image();
