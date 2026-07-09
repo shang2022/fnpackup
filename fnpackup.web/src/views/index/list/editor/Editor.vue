@@ -19,6 +19,7 @@ import WizardWrap from './WizardWrap.vue';
 import CommandWrap from './CommandWrap.vue';
 import Fnpack from './Fnpack.vue';
 import Env from './Env.vue';
+import I18n from './I18n.vue';
 export default {
     components:{Privilege,UiConfig},
     props:['path'],
@@ -34,6 +35,7 @@ export default {
             CommandWrap,
             Fnpack,
             Env,
+            I18n,
             Source,
         ];
 

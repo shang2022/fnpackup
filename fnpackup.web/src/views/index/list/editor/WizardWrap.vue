@@ -90,6 +90,7 @@ export default {
                         resolve({
                             path:res.path,
                             content:res.content,
+                            delete:res.delete,
                             changed_key:key,
                             changed:Object.values(state.changeds).some(c=>c)
                         })

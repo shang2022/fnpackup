@@ -40,6 +40,8 @@ const remarks = {
     'building':'应用构建',
     'building/building':'应用构建配置',
 
+    'i18n':'国际化',
+
 }
 const documents = [
     {match:/^manifest$/,url:'https://developer.fnnas.com/docs/core-concepts/manifest'},

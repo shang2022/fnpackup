@@ -30,7 +30,7 @@
 import {getCurrentInstance, nextTick, onMounted, onUnmounted, reactive, watch } from 'vue';
 import { useProjects } from '../list';
 import Editor from './Editor.vue';
-import { fetchFileWrite, fetchProjectExists } from '@/api/api';
+import { fetchFileDelete, fetchFileWrite, fetchProjectExists } from '@/api/api';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useLogger } from '../../logger';
 export default {
@@ -56,8 +56,9 @@ export default {
                 {label:'6、入口图标',key:'app/ui/images/icon_256.png','exists_key':'ui','exists':false},
                 {label:'7、用户向导',key:'wizard/install'},
                 {label:'8、启停脚本',key:'cmd/main'},
-                {label:'9、Docker',key:'app/docker/docker-compose.yaml','exists_key':'docker','exists':false},
-                {label:'10、打包下载',key:'fnpack'},
+                {label:'9、国际化',key:'i18n/en-US'},
+                {label:'10、Docker',key:'app/docker/docker-compose.yaml','exists_key':'docker','exists':false},
+                {label:'11、打包下载',key:'fnpack'},
                 {label:'环境变量',key:'env'},
             ],
             currents:{},
@@ -122,6 +123,12 @@ export default {
                 const getContent = _ref.getContent;
                 const setChangedContent = _ref.setChangedContent;
                 getContent().then((res)=>{  
+                    if(res.delete  && res.delete.f && res.delete.value){
+                        fetchFileDelete(res.path,res.delete.f);
+                        state.loading = false;
+                        projects.value.load();
+                        return;
+                    }
                     fetchFileWrite(res.path,res.content)
                     .then((msg)=>{
                         if(msg){
@@ -144,7 +151,7 @@ export default {
                     }).finally(()=>{
                         state.loading = false;
                     });
-                });
+                })
             })
         }
 
