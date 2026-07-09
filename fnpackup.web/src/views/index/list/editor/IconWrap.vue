@@ -14,6 +14,7 @@
 import { reactive } from 'vue';
 import { useProjects } from '../list';
 import Icon from './Icon.vue';
+import { t } from '@/i18n';
 
 export default {
     match:/(ICON|icon).*(PNG|png)$/,
@@ -28,14 +29,14 @@ export default {
             /\/ui/.test(props.path)?'icon_256.png':'ICON_256.PNG',
             /\/ui/.test(props.path)?'icon_64.png':'ICON.PNG',
         ];
-        const prefix = /\.PNG$/.test(props.path) ? '应用':'入口';
+        const isAppIcon = /\.PNG$/.test(props.path);
         const paths =  props.path.split('/');
 
         const state = reactive({
             type:paths[paths.length-1],
             types: [
-                {label:`${prefix}大图标`,value:names[0],path:`${paths.filter((c,i)=>i<paths.length-1).join('/')}/${names[0]}`},
-                {label:`${prefix}小图标`,value:names[1],path:`${paths.filter((c,i)=>i<paths.length-1).join('/')}/${names[1]}`}
+                {label:isAppIcon ? t('icon.appLarge') : t('icon.entryLarge'),value:names[0],path:`${paths.filter((c,i)=>i<paths.length-1).join('/')}/${names[0]}`},
+                {label:isAppIcon ? t('icon.appSmall') : t('icon.entrySmall'),value:names[1],path:`${paths.filter((c,i)=>i<paths.length-1).join('/')}/${names[1]}`}
             ]
         });
         return {projects,state}

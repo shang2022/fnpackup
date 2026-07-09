@@ -1,33 +1,33 @@
 <template>
      <div class="item">
-        <el-form label-width="80">
-            <el-form-item label="入口标识">
+        <el-form label-width="140">
+            <el-form-item :label="$t('uiConfig.entryId')">
                 <el-input v-model="item._key" ></el-input>
             </el-form-item>
-            <el-form-item label="显示标题" prop="title">
+            <el-form-item :label="$t('uiConfig.displayTitle')" prop="title">
                 <el-input v-model="item.title" />
             </el-form-item>
-            <el-form-item label="显示图标" prop="icon">
+            <el-form-item :label="$t('uiConfig.displayIcon')" prop="icon">
                 <el-input v-model="item.icon" />
             </el-form-item>
             <el-form-item label="" label-width="0" class="mgb-0">
                 <el-row>
                     <el-col :span="9">
-                        <el-form-item label="打开协议" prop="protocol">
+                        <el-form-item :label="$t('uiConfig.protocol')" prop="protocol">
                             <el-select v-model="item.protocol">
                                 <el-option key="http" label="http" value="http"></el-option>
                                 <el-option key="https" label="https" value="https"></el-option>
-                                <el-option key="--" label="自适应https" value=""></el-option>
+                                <el-option key="--" :label="$t('uiConfig.autoHttps')" value=""></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="端口" prop="port" label-width="40">
+                        <el-form-item :label="$t('uiConfig.port')" prop="port" label-width="40">
                             <el-input v-model="item.port" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item label="路径" prop="url" label-width="40">
+                        <el-form-item :label="$t('uiConfig.path')" prop="url" label-width="40">
                             <el-input v-model="item.url" />
                         </el-form-item>
                     </el-col>
@@ -39,21 +39,21 @@
                     <span class="flex-1"></span>
                     <span>
                         <el-radio-group v-model="item.type">
-                            <el-radio value="url" class="mgr-1">新标签打开</el-radio>
-                            <el-radio value="iframe">内嵌打开</el-radio>
+                            <el-radio value="url" class="mgr-1">{{ $t('uiConfig.newTab') }}</el-radio>
+                            <el-radio value="iframe">{{ $t('uiConfig.iframe') }}</el-radio>
                         </el-radio-group>
                     </span>
                 </div>
             </el-form-item>
-            <el-form-item label="网关注册">
+            <el-form-item :label="$t('uiConfig.gateway')">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="访问前缀" prop="gatewayPrefix">
+                        <el-form-item :label="$t('uiConfig.gatewayPrefix')" prop="gatewayPrefix">
                             <el-input v-model="item.gatewayPrefix" placeholder="/app/{appname}" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="sock文件名" prop="gatewaySocket">
+                        <el-form-item :label="$t('uiConfig.gatewaySocket')" prop="gatewaySocket">
                             <el-input v-model="item.gatewaySocket" placeholder="app.sock" />
                         </el-form-item>
                     </el-col>
@@ -61,13 +61,13 @@
             </el-form-item>
             <el-form-item label="" v-if="item.gatewayPrefix">
                 <div class="flex w-100">
-                    {{ item.protocol || 'http' }}://fn_ip:{{ item.port || '5666' }}{{item.gatewayPrefix }} 会转发到 /var/apps/{{item._key.split('.')[0]}}/target/{{item.gatewaySocket}}
+                    {{ item.protocol || 'http' }}://fn_ip:{{ item.port || '5666' }}{{item.gatewayPrefix }} {{ $t('uiConfig.forwardTo') }} /var/apps/{{item._key.split('.')[0]}}/target/{{item.gatewaySocket}}
                 </div>
             </el-form-item>
-            <el-form-item label="访问权限" prop="allUsers">
+            <el-form-item :label="$t('uiConfig.accessPermission')" prop="allUsers">
                 <el-radio-group v-model="item.allUsers">
-                    <el-radio :value="true" class="mgr-1">所有用户可访问</el-radio>
-                    <el-radio :value="false">仅管理员可访问</el-radio>
+                    <el-radio :value="true" class="mgr-1">{{ $t('uiConfig.allUsers') }}</el-radio>
+                    <el-radio :value="false">{{ $t('uiConfig.adminOnly') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
             
@@ -75,11 +75,11 @@
                 <el-form-item label="" label-width="0">
                     <el-row class="w-100">
                         <el-col :span="10">
-                            <el-form-item label="用户权限" prop="accessPerm">
+                            <el-form-item :label="$t('uiConfig.userPermission')" prop="accessPerm">
                                 <el-select v-model="item.control.accessPerm">
-                                    <el-option key="editable" label="可编辑" value="editable"></el-option>
-                                    <el-option key="readonly" label="只读" value="readonly"></el-option>
-                                    <el-option key="hidden" label="隐藏" value="hidden"></el-option>
+                                    <el-option key="editable" :label="$t('uiConfig.editable')" value="editable"></el-option>
+                                    <el-option key="readonly" :label="$t('uiConfig.readonly')" value="readonly"></el-option>
+                                    <el-option key="hidden" :label="$t('uiConfig.hidden')" value="hidden"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -87,13 +87,13 @@
                 </el-form-item>
             </template>
             
-            <el-form-item label="文件右键" prop="noDisplay">
+            <el-form-item :label="$t('uiConfig.fileContext')" prop="noDisplay">
                 <el-radio-group v-model="item.noDisplay">
-                    <el-radio :value="true" class="mgr-1">仅右键菜单显示</el-radio>
-                    <el-radio :value="false">桌面和右键菜单显示</el-radio>
+                    <el-radio :value="true" class="mgr-1">{{ $t('uiConfig.contextOnly') }}</el-radio>
+                    <el-radio :value="false">{{ $t('uiConfig.desktopAndContext') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="关联类型" prop="fileTypes">
+            <el-form-item :label="$t('uiConfig.fileTypes')" prop="fileTypes">
                 <el-select v-model="item.fileTypes" filterable clearable allow-create 
                 multiple collapse-tags collapse-tags-tooltip :max-collapse-tags="19">
                     <el-option v-for="item in state.fileTypes" :key="item" :label="item" :value="item"></el-option>

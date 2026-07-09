@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="state.show" title="图标设计器"  width="510" top="1vh"
+    <el-dialog v-model="state.show" :title="$t('icon.iconDesigner')"  width="510" top="1vh"
     :close-on-click-modal="false" :close-on-press-escape="false" draggable class="paint-dialog">
         <div class="paint-wrap flex flex-nowrap">       
             <div v-if="state.svg" class="svg-wrap"  ref="wrap" @click="handleWrapClick"
@@ -68,7 +68,7 @@
                 </svg>
                 <div class="setting-wrap mgt-1 flex">
                     <el-color-picker v-model="state.svg.setting.cline.color" size="small" show-alpha />
-                    <el-checkbox v-model="state.svg.setting.cline.show" size="small" class="mgl-1">中心线</el-checkbox>
+                    <el-checkbox v-model="state.svg.setting.cline.show" size="small" class="mgl-1">{{ $t('paint.centerLine') }}</el-checkbox>
                     <span class="flex-1"></span>
                     <el-button plain size="small" @click="handleAddText">
                         +<img src="paint-text.svg" height="14">
@@ -78,17 +78,17 @@
                     </el-button>
                 </div>
                 <div class="btns t-c mgt-1">
-                    <el-button plain :loading="state.loading" @click="handleSaveSvg" size="small">保存设计</el-button>
-                    <el-button plain type="primary" class="mgl-1" :loading="state.loading" @click="handleSaveIcon" size="small">保存图标</el-button>
+                    <el-button plain :loading="state.loading" @click="handleSaveSvg" size="small">{{ $t('paint.saveDesign') }}</el-button>
+                    <el-button plain type="primary" class="mgl-1" :loading="state.loading" @click="handleSaveIcon" size="small">{{ $t('paint.saveIcon') }}</el-button>
                     <el-dropdown class="mgl-1">
                         <el-button plain type="info" size="small">
-                            下载<el-icon><ArrowDown /></el-icon>
+                            {{ $t('paint.download') }}<el-icon><ArrowDown /></el-icon>
                         </el-button>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item @click="handleDownloadIcon('json')">下载json</el-dropdown-item>
-                                <el-dropdown-item @click="handleDownloadIcon('svg')">下载svg</el-dropdown-item>
-                                <el-dropdown-item @click="handleDownloadIcon('png')">下载png</el-dropdown-item>
+                                <el-dropdown-item @click="handleDownloadIcon('json')">{{ $t('paint.downloadJson') }}</el-dropdown-item>
+                                <el-dropdown-item @click="handleDownloadIcon('svg')">{{ $t('paint.downloadSvg') }}</el-dropdown-item>
+                                <el-dropdown-item @click="handleDownloadIcon('png')">{{ $t('paint.downloadPng') }}</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -96,20 +96,20 @@
             </div>
             <div class="control-wrap flex-1" v-if="state.element">
                 <template v-if="state.element.type == 'background'">
-                    <el-descriptions title="设置背景" :column="1" size="small" border class="w-100" :label-width="70">
-                        <el-descriptions-item label="圆角半径">
+                    <el-descriptions :title="$t('paint.backgroundSettings')" :column="1" size="small" border class="w-100" :label-width="70">
+                        <el-descriptions-item :label="$t('paint.borderRadius')">
                             <div class="mgl-1">
                                 <el-slider v-model="state.element.fill.rx" size="small" :min="0" :max="256" />
                             </div>
                         </el-descriptions-item>
-                        <el-descriptions-item label="填充类型">
+                        <el-descriptions-item :label="$t('paint.fillType')">
                             <el-select v-model="state.element.fill.type" class="flex-1" size="small">
                                 <template v-for="(item,index) in state.fillTypes">
                                     <el-option :value="item.value" :label="item.name"></el-option>
                                 </template>
                             </el-select>
                         </el-descriptions-item>
-                        <el-descriptions-item label="填充颜色">
+                        <el-descriptions-item :label="$t('paint.fillColor')">
                             <template v-if="state.element.fill.type == 'fill'">
                                 <el-color-picker v-model="state.element.fill.color" size="small" show-alpha />
                             </template>
@@ -118,45 +118,45 @@
                                 <el-color-picker v-model="state.element.fill.color2" size="small" show-alpha />
                             </template>
                         </el-descriptions-item>
-                        <el-descriptions-item label="径向半径" v-if="state.element.fill.type == 'radial-gradient'">
+                        <el-descriptions-item :label="$t('paint.radialRadius')" v-if="state.element.fill.type == 'radial-gradient'">
                             <div class="mgl-1">
                                 <el-slider v-model="state.element.fill.r" size="small" :min="0" :max="500" />
                             </div>
                         </el-descriptions-item>
-                        <el-descriptions-item label="径向x" v-if="state.element.fill.type == 'radial-gradient'">
+                        <el-descriptions-item :label="$t('paint.radialX')" v-if="state.element.fill.type == 'radial-gradient'">
                             <div class="mgl-1">
                                 <el-slider v-model="state.element.fill.cx" size="small" :min="0" :max="100" />
                             </div>
                         </el-descriptions-item>
-                        <el-descriptions-item label="径向y" v-if="state.element.fill.type == 'radial-gradient'">
+                        <el-descriptions-item :label="$t('paint.radialY')" v-if="state.element.fill.type == 'radial-gradient'">
                             <div class="mgl-1">
                                 <el-slider v-model="state.element.fill.cy" size="small" :min="0" :max="100" />
                             </div>
                         </el-descriptions-item>
-                        <el-descriptions-item label="描边">
+                        <el-descriptions-item :label="$t('paint.stroke')">
                             <el-input-number v-model="state.element.stroke.size" size="small" />
                         </el-descriptions-item>
-                        <el-descriptions-item label="描边颜色">
+                        <el-descriptions-item :label="$t('paint.strokeColor')">
                             <el-color-picker v-model="state.element.stroke.color" size="small" show-alpha />
                         </el-descriptions-item>
                     </el-descriptions>
                 </template>
                 <template v-if="state.element.type == 'text'">
-                    <el-descriptions title="设置文本" :column="1" size="small" border class="w-100" :label-width="70">
-                        <el-descriptions-item label="文本">
+                    <el-descriptions :title="$t('paint.textSettings')" :column="1" size="small" border class="w-100" :label-width="70">
+                        <el-descriptions-item :label="$t('paint.text')">
                             <el-input v-model="state.element.text" size="small" @change="handleStrokeBorder"/>
                         </el-descriptions-item>
-                        <el-descriptions-item label="字体">
+                        <el-descriptions-item :label="$t('paint.font')">
                             <el-select v-model="state.element.font" class="flex-1" size="small" @change="handleStrokeBorder">
                                 <template v-for="(item,index) in state.fonts">
                                     <el-option :value="item.value" :label="item.name"></el-option>
                                 </template>
                             </el-select>
                         </el-descriptions-item>
-                        <el-descriptions-item label="大小">
+                        <el-descriptions-item :label="$t('paint.size')">
                             <el-input-number v-model="state.element.size" size="small" @change="handleStrokeBorder"/>
                         </el-descriptions-item>
-                        <el-descriptions-item label="字重">
+                        <el-descriptions-item :label="$t('paint.weight')">
                             <el-select v-model="state.element.weight" class="flex-1" size="small" @change="handleStrokeBorder">
                                 <el-option value="normal" label="normal"></el-option>
                                 <el-option value="100" label="100"></el-option>
@@ -171,13 +171,13 @@
                                 <el-option value="bold" label="bold"></el-option>
                             </el-select>
                         </el-descriptions-item>
-                        <el-descriptions-item label="颜色">
+                        <el-descriptions-item :label="$t('paint.color')">
                             <el-color-picker v-model="state.element.fill" size="small" show-alpha />
                         </el-descriptions-item>
-                        <el-descriptions-item label="描边">
+                        <el-descriptions-item :label="$t('paint.stroke')">
                             <el-input-number v-model="state.element.stroke.size" size="small" />
                         </el-descriptions-item>
-                        <el-descriptions-item label="描边颜色">
+                        <el-descriptions-item :label="$t('paint.strokeColor')">
                             <el-color-picker v-model="state.element.stroke.color" size="small" show-alpha />
                         </el-descriptions-item>
                         <el-descriptions-item label="x">
@@ -186,8 +186,8 @@
                         <el-descriptions-item label="y">
                             <el-input-number v-model="state.element.y" size="small" @change="handleStrokeBorder"/>
                         </el-descriptions-item>
-                        <el-descriptions-item label="操作">
-                            <el-popconfirm title="确定删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="handleDelete(state.svg.texts)">
+                        <el-descriptions-item :label="$t('paint.operation')">
+                            <el-popconfirm :title="$t('common.deleteConfirm')" :confirm-button-text="$t('common.confirm')" :cancel-button-text="$t('common.cancel')" @confirm="handleDelete(state.svg.texts)">
                                 <template #reference>
                                 <el-button type="danger" size="small"><el-icon><DeleteFilled></DeleteFilled></el-icon></el-button>
                                 </template>
@@ -196,14 +196,14 @@
                     </el-descriptions>
                 </template>
                 <template v-if="state.element.type == 'image'">
-                    <el-descriptions title="设置图像" :column="1" size="small" border class="w-100" :label-width="70">
-                        <el-descriptions-item label="锁定比例">
-                            <el-checkbox v-model="state.element.lock">锁定比例</el-checkbox>
+                    <el-descriptions :title="$t('paint.imageSettings')" :column="1" size="small" border class="w-100" :label-width="70">
+                        <el-descriptions-item :label="$t('paint.lockRatio')">
+                            <el-checkbox v-model="state.element.lock">{{ $t('paint.lockRatio') }}</el-checkbox>
                         </el-descriptions-item>
-                        <el-descriptions-item label="宽">
+                        <el-descriptions-item :label="$t('paint.width')">
                             <el-input-number v-model="state.element.width" size="small" @change="handleImageWidthChange" />
                         </el-descriptions-item>
-                        <el-descriptions-item label="高">
+                        <el-descriptions-item :label="$t('paint.height')">
                             <el-input-number v-model="state.element.height" size="small" @change="handleImageHeightChange" />
                         </el-descriptions-item>
                         <el-descriptions-item label="x">
@@ -212,8 +212,8 @@
                         <el-descriptions-item label="y">
                             <el-input-number v-model="state.element.y" size="small" @change="handleStrokeBorder"/>
                         </el-descriptions-item>
-                        <el-descriptions-item label="操作">
-                            <el-popconfirm title="确定删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="handleDelete(state.svg.images)">
+                        <el-descriptions-item :label="$t('paint.operation')">
+                            <el-popconfirm :title="$t('common.deleteConfirm')" :confirm-button-text="$t('common.confirm')" :cancel-button-text="$t('common.cancel')" @confirm="handleDelete(state.svg.images)">
                                 <template #reference>
                                 <el-button plain type="danger" size="small"><el-icon><DeleteFilled></DeleteFilled></el-icon></el-button>
                                 </template>
@@ -227,12 +227,12 @@
     </el-dialog>
     <el-dialog v-model="state.showSave" width="320" top="1vh"
     :close-on-click-modal="false" :close-on-press-escape="false" draggable>
-        <el-descriptions title="选择保存项" :column="1" size="small" border class="w-100" :label-width="80">
+        <el-descriptions :title="$t('icon.saveSelected')" :column="1" size="small" border class="w-100" :label-width="80">
             <template v-for="icon in state.icons">
                 <el-descriptions-item :label="icon.name">
                     <div class="flex">
                         <div style="width:50%;" class="mgr-1"><el-input-number v-model="icon.size" size="small" /></div>
-                        <el-checkbox v-model="icon.use" size="small">保存此项</el-checkbox>
+                        <el-checkbox v-model="icon.use" size="small">{{ $t('icon.saveThis') }}</el-checkbox>
                     </div>
                 </el-descriptions-item>
             </template>
@@ -241,7 +241,7 @@
                     <template v-if="state.loading">
                         {{ state.process.progress }}
                     </template>
-                    <template v-else>确定保存到所选项</template>
+                    <template v-else>{{ $t('common.confirmSaveSelected') }}</template>
                 </el-button>
             </el-descriptions-item>
         </el-descriptions>
@@ -256,6 +256,7 @@ import { ArrowDown, DeleteFilled } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { fetchFileRead, fetchFileUpload, fetchFileWrite, xhrApi } from '@/api/api';
 import { useLogger } from '../../logger';
+import { t } from '@/i18n';
 export default {
     components: {DeleteFilled,ArrowDown},
     props: ['modelValue'],
@@ -352,11 +353,11 @@ export default {
             elementIndex:-1,
             types:['background','text','image'],
             fillTypes:[
-                {name:'纯色',value:'fill'},
-                {name:'左右渐变',value:'lr-gradient'},
-                {name:'上下渐变',value:'tb-gradient'},
-                {name:'对焦渐变',value:'ltrb-gradient'},
-                {name:'径向渐变',value:'radial-gradient'},
+                {name:t('paint.solid'),value:'fill'},
+                {name:t('paint.lrGradient'),value:'lr-gradient'},
+                {name:t('paint.tbGradient'),value:'tb-gradient'},
+                {name:t('paint.ltrbGradient'),value:'ltrb-gradient'},
+                {name:t('paint.radialGradient'),value:'radial-gradient'},
             ],
             fonts:[
                 {name:'Arial',value:'Arial'},
@@ -376,10 +377,10 @@ export default {
             ],
 
             icons:[
-                {name:'应用大图标',path:`${root}/ICON_256.PNG`,use:true,size:256},
-                {name:'应用小图标',path:`${root}/ICON.PNG`,use:true,size:256},
-                {name:'入口大图标',path:`${root}/app/ui/images/icon_256.png`,use:true,size:256},
-                {name:'入口小图标',path:`${root}/app/ui/images/icon_64.png`,use:true,size:256},
+                {name:t('icon.appLarge'),path:`${root}/ICON_256.PNG`,use:true,size:256},
+                {name:t('icon.appSmall'),path:`${root}/ICON.PNG`,use:true,size:256},
+                {name:t('icon.entryLarge'),path:`${root}/app/ui/images/icon_256.png`,use:true,size:256},
+                {name:t('icon.entrySmall'),path:`${root}/app/ui/images/icon_64.png`,use:true,size:256},
             ],
             showSave:false,
             process:{
@@ -431,9 +432,9 @@ export default {
             state.elementIndex = -1;
         }
         const handleAddText = ()=>{ 
-            ElMessageBox.prompt('请输入文字', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            ElMessageBox.prompt(t('common.inputText'), t('common.tips'), {
+                confirmButtonText: t('common.ok'),
+                cancelButtonText: t('common.cancel'),
             }).then(({ value }) => {
                 if(!value) return;
                 state.svg.texts.push({
@@ -601,8 +602,8 @@ export default {
                 if(res){
                     logger.value.error(res);
                 }else{
-                    ElMessage.success('保存成功');
-                    logger.value.success(`保存成功`);
+                    ElMessage.success(t('common.saveSuccess'));
+                    logger.value.success(t('common.saveSuccess'));
                     projects.value.load();
                 }
             }).catch((e)=>{
@@ -654,7 +655,7 @@ export default {
         const handleConfirmIcon = ()=>{ 
             const icons = state.icons.filter(c=>c.use);
             if(icons.length == 0){
-                ElMessage.error('请选择保存项');
+                ElMessage.error(t('common.selectSaveItem'));
                 return;
             }
             state.loading = true;
@@ -662,11 +663,11 @@ export default {
                 if(index > icons.length-1){
                     state.loading = false;
                     state.showSave = false;
-                    logger.value.success(`已上传${icons.length}个文件`);
+                    logger.value.success(t('common.uploadedFiles', { count: icons.length }));
                     ElNotification({
                         type: 'success',
-                        title: '文件上传',
-                        message: `已上传${icons.length}个文件`,
+                        title: t('common.fileUpload'),
+                        message: t('common.uploadedFiles', { count: icons.length }),
                         duration:3000,
                     });
                     return;
@@ -696,12 +697,12 @@ export default {
                         });
                     }else{
                         state.process.progress = `100%`;
-                        logger.value.success(`已上传:${fileObj.path}`);
+                        logger.value.success(t('common.uploadedFile', { name: fileObj.path }));
                         nextTick(()=>{
                             ElNotification({
                                 type: 'success',
-                                title: '文件上传',
-                                message: `已上传:${fileObj.path}`,
+                                title: t('common.fileUpload'),
+                                message: t('common.uploadedFile', { name: fileObj.path }),
                                 duration:3000,
                             });
                         });
@@ -748,9 +749,9 @@ export default {
                     break;
                 case 'png':
                     {
-                        ElMessageBox.prompt('请输入下载尺寸', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                        ElMessageBox.prompt(t('common.inputDownloadSize'), t('common.tips'), {
+                            confirmButtonText: t('common.ok'),
+                            cancelButtonText: t('common.cancel'),
                             inputPattern: /^[0-9]+$/,
                             inputValue:256
                         }).then(async ({ value }) => {

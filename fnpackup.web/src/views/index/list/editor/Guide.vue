@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="state.show" :title="`快速编辑`" 
+    <el-dialog v-model="state.show" :title="$t('editor.quickEdit')" 
     :width="`${projects.editor.width+240}px`"
     :close-on-click-modal="false" :close-on-press-escape="false"  top="1vh" draggable  class="guide-dialog">
         <el-tabs type="border-card" tabPosition="left" v-model="state.key" @tab-change="handleChange" class="tabs">
@@ -18,9 +18,9 @@
             </template>
         </el-tabs>
         <div class="t-c mgt-1">
-            <el-button @click="handleCancel" :loading="state.loading">取消</el-button>
+            <el-button @click="handleCancel" :loading="state.loading">{{ $t('common.cancel') }}</el-button>
             <template v-if="state.showSave">
-                <el-button type="primary" @click="handleSave" :loading="state.loading">保存当前修改</el-button>
+                <el-button type="primary" @click="handleSave" :loading="state.loading">{{ $t('editor.saveCurrent') }}</el-button>
             </template>
         </div>
     </el-dialog>
@@ -33,6 +33,7 @@ import Editor from './Editor.vue';
 import { fetchFileDelete, fetchFileWrite, fetchProjectExists } from '@/api/api';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useLogger } from '../../logger';
+import { t } from '@/i18n';
 export default {
     components:{Editor},
     props:['modelValue'],
@@ -48,18 +49,18 @@ export default {
             key:'manifest',
             root:root.join('/'),
             tabs:[
-                {label:'1、应用清单',key:'manifest'},
-                {label:'2、应用图标',key:'ICON_256.PNG'},
-                {label:'3、应用权限',key:'config/privilege'},
-                {label:'4、应用资源',key:'config/resource'},
-                {label:'5、应用入口',key:'app/ui/config','exists_key':'ui','exists':false},
-                {label:'6、入口图标',key:'app/ui/images/icon_256.png','exists_key':'ui','exists':false},
-                {label:'7、用户向导',key:'wizard/install'},
-                {label:'8、启停脚本',key:'cmd/main'},
-                {label:'9、国际化',key:'i18n/en-US'},
-                {label:'10、Docker',key:'app/docker/docker-compose.yaml','exists_key':'docker','exists':false},
-                {label:'11、打包下载',key:'fnpack'},
-                {label:'环境变量',key:'env'},
+                {label:t('editor.guideTabs.manifest'),key:'manifest'},
+                {label:t('editor.guideTabs.appIcon'),key:'ICON_256.PNG'},
+                {label:t('editor.guideTabs.privilege'),key:'config/privilege'},
+                {label:t('editor.guideTabs.resource'),key:'config/resource'},
+                {label:t('editor.guideTabs.entry'),key:'app/ui/config','exists_key':'ui','exists':false},
+                {label:t('editor.guideTabs.entryIcon'),key:'app/ui/images/icon_256.png','exists_key':'ui','exists':false},
+                {label:t('editor.guideTabs.wizard'),key:'wizard/install'},
+                {label:t('editor.guideTabs.command'),key:'cmd/main'},
+                {label:t('editor.guideTabs.i18n'),key:'i18n/en-US'},
+                {label:t('editor.guideTabs.docker'),key:'app/docker/docker-compose.yaml','exists_key':'docker','exists':false},
+                {label:t('editor.guideTabs.pack'),key:'fnpack'},
+                {label:t('editor.guideTabs.env'),key:'env'},
             ],
             currents:{},
             contents:{},
@@ -96,9 +97,9 @@ export default {
 
         const handleCancel = () => {
             if(state.changeds[state.key]){
-                ElMessageBox.confirm('存在尚未保存的修改，是否保存？', '提示', {
-                    confirmButtonText: '保存关闭',
-                    cancelButtonText: '直接关闭',
+                ElMessageBox.confirm(t('common.unsavedConfirm'), t('common.tips'), {
+                    confirmButtonText: t('common.saveAndClose'),
+                    cancelButtonText: t('common.closeDirectly'),
                     type: 'warning',
                     draggable:true,
                     customStyle: {
@@ -132,13 +133,13 @@ export default {
                     fetchFileWrite(res.path,res.content)
                     .then((msg)=>{
                         if(msg){
-                            ElMessage.error('保存失败');
+                            ElMessage.error(t('common.saveFailed'));
                             logger.value.error(msg);
                             reject();
                         }else{
                             state.contents[state.key] = res.content;
-                            ElMessage.success('保存成功');
-                            logger.value.success(`[${res.path}]保存成功`);
+                            ElMessage.success(t('common.saveSuccess'));
+                            logger.value.success(`[${res.path}]${t('common.saveSuccess')}`);
                             if(setChangedContent && res.changed_key){
                                 setChangedContent(res.changed_key,res.content);
                             }
@@ -147,7 +148,7 @@ export default {
                         }
                     }).catch(()=>{
                         reject();
-                        ElMessage.error('操作失败');
+                        ElMessage.error(t('common.operationFailed'));
                     }).finally(()=>{
                         state.loading = false;
                     });

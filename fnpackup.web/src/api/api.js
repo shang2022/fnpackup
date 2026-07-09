@@ -1,3 +1,5 @@
+import { t } from '@/i18n';
+
 const BASE_URL = process.env.NODE_ENV === 'development' ? `http://localhost:1069` : '';
 export const fetchApi = (url,options = {}) => {
     let uri = window.location.href.indexOf('index.cgi')>=0 
@@ -37,14 +39,14 @@ export const xhrApi = (url,params,data,progressFn) => {
                         resolve(xhr.responseText);
                     }
                 } else {
-                    reject(new Error(`上传失败: ${xhr.status}`));
+                    reject(new Error(t('common.uploadFailed', { status: xhr.status })));
                 }
             });
             xhr.addEventListener('error', () => {
-                reject(new Error('网络错误'));
+                reject(new Error(t('common.networkError')));
             });
             xhr.addEventListener('abort', () => {
-                reject(new Error('上传已取消'));
+                reject(new Error(t('common.uploadCanceled')));
             });
             xhr.open('POST', uri);
             xhr.send(data);

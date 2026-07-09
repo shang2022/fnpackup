@@ -2,7 +2,7 @@
     <el-card class="mgb-1" shadow="never">
         <template #header>
             <div class="card-header flex">
-                <span>数据共享</span>
+                <span>{{ $t('resource.dataShare') }}</span>
                 <span class="flex-1"></span>
                 <el-button size="small" @click="handleAdd(0)"><el-icon><Plus></Plus></el-icon></el-button>
             </div>
@@ -12,7 +12,7 @@
                 <el-form-item label="" label-width="0" class="mgb-0">
                     <el-row class="w-100">
                         <el-col :span="19">
-                            <el-form-item label="资源" label-width="40">
+                            <el-form-item :label="$t('resource.resource')" label-width="80">
                                 <el-input v-model="item.name" size="small"></el-input>
                             </el-form-item>
                         </el-col>
@@ -24,7 +24,7 @@
                         </el-col>
                     </el-row>
                 </el-form-item>
-                <el-form-item label="权限" label-width="40" class="mgb-1">
+                <el-form-item :label="$t('resource.permission')" label-width="80" class="mgb-1">
                     <el-row class="w-100">
                         <el-col :span="12">
                             <el-form-item label="ro" label-width="30">

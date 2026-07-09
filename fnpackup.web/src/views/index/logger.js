@@ -1,11 +1,12 @@
 import dayjs from 'dayjs';
 import { inject, provide, ref } from "vue";
+import { t } from '@/i18n';
 
 const loggerSymbol = Symbol();
 export const provideLogger = () => {
     const logger = ref({
         version:0,
-        list:[{type:'info',msg:'操作日志显示',time:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')}],
+        list:[{type:'info',msg:t('log.initial'),time:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')}],
         info(msg){
             this.list.push({type:'info',msg:msg,time:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')});
             this.version++;

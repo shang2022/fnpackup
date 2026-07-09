@@ -1,6 +1,6 @@
 <template>
     <div class="manifest-wrap h-100">
-        <el-form ref="ruleFormRef"  :model="state.ruleForm" :rules="state.rules" label-width="140" class="h-100 flex flex-column flex-nowrap">
+        <el-form ref="ruleFormRef"  :model="state.ruleForm" :rules="state.rules" label-width="180" class="h-100 flex flex-column flex-nowrap">
             <div class="flex-1 inner scrollbar">
                 <template v-for="(item,index) in fieldsArray">
                     <el-form-item :label="item.type == 'checkbox'?'':item.label" :prop="item.name">
@@ -8,7 +8,7 @@
                             <div>
                                 <span>{{ label }}</span>
                                 <template v-if="item.help">
-                                    <el-popover title="提示" placement="top" width="240">
+                                    <el-popover :title="$t('manifest.hint')" placement="top" width="240">
                                         <template #reference>
                                             <el-icon size="12"><QuestionFilled></QuestionFilled></el-icon>
                                         </template>
@@ -76,10 +76,11 @@ import { useProjects } from '../list';
 import { fetchAppCenter, fetchFileRead, fetchProjectExists } from '@/api/api';
 import { useLogger } from '../../logger';
 import {  QuestionFilled } from '@element-plus/icons-vue';
+import { t } from '@/i18n';
 
 export default {
     match:/manifest$/,
-    width:500,
+    width:600,
     components:{QuestionFilled},
     props:['path','content'],
     setup (props) {
@@ -105,36 +106,36 @@ export default {
 
 
         const staticHelp = [
-            '可以填写app下的文件夹<br/>比如填写www则可通过<br/>',
+            t('manifest.staticHelp1'),
             `{appname}.domain.com:${window.location.port}<br>`,
             `domain.com:${window.location.port}/{appname}<br>`,
-            `访问app/www下的静态文件`
+            t('manifest.staticHelp4')
         ];
 
         const fieldsArray = ref([
-            {name: 'appname', label: '应用的唯一标识符', type: 'input',default:'',rules:[{required: true, message: '请填写唯一标识符', trigger: 'blur'}]},
-            {name: 'version', label: '应用版本号', type: 'input',default:'0.0.1',rules:[{required: true, message: '请填写版本号', trigger: 'blur'}]},
-            {name: 'display_name', label: '应用显示名', type: 'input',default:'',rules:[{required: true, message: '请填写显示名', trigger: 'blur'}]},
-            {name: 'desc', label: '详细介绍支持HTML', type: 'textarea',default:'',rules:[{required: true, message: '请填写描述', trigger: 'blur'}]},
-            { name: 'platform', label: '架构类型', type: 'select',  default:'x86',
+            {name: 'appname', label: t('manifest.fields.appname'), type: 'input',default:'',rules:[{required: true, message: t('manifest.rules.appname'), trigger: 'blur'}]},
+            {name: 'version', label: t('manifest.fields.version'), type: 'input',default:'0.0.1',rules:[{required: true, message: t('manifest.rules.version'), trigger: 'blur'}]},
+            {name: 'display_name', label: t('manifest.fields.displayName'), type: 'input',default:'',rules:[{required: true, message: t('manifest.rules.displayName'), trigger: 'blur'}]},
+            {name: 'desc', label: t('manifest.fields.desc'), type: 'textarea',default:'',rules:[{required: true, message: t('manifest.rules.desc'), trigger: 'blur'}]},
+            { name: 'platform', label: t('manifest.fields.platform'), type: 'select',  default:'x86',
                 options: [
-                    {label: '任意', value: 'all'},
-                    {label: '仅x86', value: 'x86'},
-                    {label: '仅arm', value: 'arm'},
-                    {label: '仅loongarch', value: 'loongarch'},
-                    {label: '仅risc-v', value: 'risc-v'},
+                    {label: t('manifest.any'), value: 'all'},
+                    {label: t('manifest.onlyX86'), value: 'x86'},
+                    {label: t('manifest.onlyArm'), value: 'arm'},
+                    {label: t('manifest.onlyLoongarch'), value: 'loongarch'},
+                    {label: t('manifest.onlyRiscv'), value: 'risc-v'},
                 ]
             },
-            {name: 'source', label: '应用来源', type: 'select', options: [{label: '第三方应用', value: 'thirdparty'}],default:'thirdparty'},
-            {name: 'maintainer', label: '开发者名', type: 'input',default:'',rules:[{required: true, message: '请填写开发者名', trigger: 'blur'}]},
-            {name: 'maintainer_url', label: '开发者网站/联系方式', type: 'input',default:''},
-            {name: 'distributor', label: '发布者名', type: 'input',default:'',rules:[{required: true, message: '请填写发布者名', trigger: 'blur'}]},
-            {name: 'distributor_url', label: '发布者网站/联系方式', type: 'input',default:''},
-            {name: 'os_min_version', label: '支持最低系统版本', type: 'input',default:''},
-            {name: 'os_max_version', label: '支持最高系统版本', type: 'input',default:''},
-            {name: 'ctl_stop', label: '显示启动/停止功能', type: 'checkbox',default:true},
-            {name: 'install_type', label: '安装类型', type: 'select',options:[{label: '应用用户', value: ' '},{label: 'root用户', value: 'root'}],default:' '},
-            {name: 'install_dep_apps', label: '依赖应用列表', type: 'select',options:[],create:true,remote:true,remoteFn:(query)=>{
+            {name: 'source', label: t('manifest.fields.source'), type: 'select', options: [{label: t('manifest.thirdparty'), value: 'thirdparty'}],default:'thirdparty'},
+            {name: 'maintainer', label: t('manifest.fields.maintainer'), type: 'input',default:'',rules:[{required: true, message: t('manifest.rules.maintainer'), trigger: 'blur'}]},
+            {name: 'maintainer_url', label: t('manifest.fields.maintainerUrl'), type: 'input',default:''},
+            {name: 'distributor', label: t('manifest.fields.distributor'), type: 'input',default:'',rules:[{required: true, message: t('manifest.rules.distributor'), trigger: 'blur'}]},
+            {name: 'distributor_url', label: t('manifest.fields.distributorUrl'), type: 'input',default:''},
+            {name: 'os_min_version', label: t('manifest.fields.osMinVersion'), type: 'input',default:''},
+            {name: 'os_max_version', label: t('manifest.fields.osMaxVersion'), type: 'input',default:''},
+            {name: 'ctl_stop', label: t('manifest.fields.ctlStop'), type: 'checkbox',default:true},
+            {name: 'install_type', label: t('manifest.fields.installType'), type: 'select',options:[{label: t('manifest.appUser'), value: ' '},{label: t('manifest.rootUser'), value: 'root'}],default:' '},
+            {name: 'install_dep_apps', label: t('manifest.fields.installDepApps'), type: 'select',options:[],create:true,remote:true,remoteFn:(query)=>{
                 fetchAppCenter(query)
                 .then(res => {
                     if(res.code == 0){
@@ -146,13 +147,13 @@ export default {
                     logger.value.error(res.msg);
                 });
             },default:''},
-            {name: 'desktop_uidir', label: 'UI组件目录路径', type: 'input',default:'ui'},
-            {name: 'desktop_applaunchname', label: '应用中心启动入口',  type: 'select',options:[],default:''},
-            {name: 'service_port', label: '占用端口', type: 'input',default:''},
-            {name: 'checkport', label: '检查端口占用', type: 'checkbox',default:true},
-            {name: 'disable_authorization_path', label: '是否禁用授权目录功能', type: 'checkbox',default:false},
-            {name: 'fnpackup', label: '静态托管', type: 'input',default:'',help:staticHelp.join('')},
-            {name: 'changelog', label: '应用更新日志', type: 'input',default:''},
+            {name: 'desktop_uidir', label: t('manifest.fields.desktopUidir'), type: 'input',default:'ui'},
+            {name: 'desktop_applaunchname', label: t('manifest.fields.desktopApplaunchname'),  type: 'select',options:[],default:''},
+            {name: 'service_port', label: t('manifest.fields.servicePort'), type: 'input',default:''},
+            {name: 'checkport', label: t('manifest.fields.checkport'), type: 'checkbox',default:true},
+            {name: 'disable_authorization_path', label: t('manifest.fields.disableAuthorizationPath'), type: 'checkbox',default:false},
+            {name: 'fnpackup', label: t('manifest.fields.fnpackup'), type: 'input',default:'',help:staticHelp.join('')},
+            {name: 'changelog', label: t('manifest.fields.changelog'), type: 'input',default:''},
             
         ]);
         const rules = fieldsArray.value.reduce((json,item)=>{

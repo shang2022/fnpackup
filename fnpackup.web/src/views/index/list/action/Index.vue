@@ -1,14 +1,14 @@
 <template>
     <div class="actions-wrap">
         <template v-if="paths.length == 0">
-            <el-button type="primary" plain size="small" @click="handleCreate"><el-icon><Plus /></el-icon>创建应用</el-button>
-            <el-button plain size="small" @click="handleUpload('.fpk')"><el-icon><Upload /></el-icon>导入fpk</el-button>
+            <el-button type="primary" plain size="small" @click="handleCreate"><el-icon><Plus /></el-icon>{{ $t('action.createApp') }}</el-button>
+            <el-button plain size="small" @click="handleUpload('.fpk')"><el-icon><Upload /></el-icon>{{ $t('action.importFpk') }}</el-button>
         </template>
         <template v-if="paths.length >= 1">
-            <el-button type="primary" plain size="small" @click="handleBuild"><el-icon><Pointer /></el-icon>打包fpk</el-button>
-            <el-button type="success" plain size="small" @click="handleGuide"><el-icon><Files /></el-icon>快速编辑</el-button>     
-            <el-button type="warning" plain size="small" @click="handleIcon"><el-icon><Picture /></el-icon>图标设计</el-button>     
-            <el-button type="info" plain size="small" @click="handleEnv"><el-icon><MessageBox /></el-icon>环境变量</el-button> 
+            <el-button type="primary" plain size="small" @click="handleBuild"><el-icon><Pointer /></el-icon>{{ $t('action.buildFpk') }}</el-button>
+            <el-button type="success" plain size="small" @click="handleGuide"><el-icon><Files /></el-icon>{{ $t('action.quickEdit') }}</el-button>     
+            <el-button type="warning" plain size="small" @click="handleIcon"><el-icon><Picture /></el-icon>{{ $t('action.iconDesign') }}</el-button>     
+            <el-button type="info" plain size="small" @click="handleEnv"><el-icon><MessageBox /></el-icon>{{ $t('action.envVars') }}</el-button> 
         </template>
             
         <Create v-model="projects.editor.create" v-if="projects.editor.create"></Create>
@@ -22,6 +22,7 @@ import { computed } from 'vue';
 import { useProjects } from '../list';
 import Create from './Create.vue';
 import UploadFile from './Upload.vue';
+import { t } from '@/i18n';
 export default {
     components: {
         Upload,Pointer,Plus,Files,Create,UploadFile,Picture,MessageBox
@@ -35,7 +36,7 @@ export default {
         const handleBuild = ()=>{
             const name = projects.value.page.path.split('/').filter(item=>item && item!='.')[0];
             projects.value.editor.path =`./${name}/fnpack`;
-            projects.value.editor.remark = '打包下载';
+            projects.value.editor.remark = t('action.packDownload');
             projects.value.editor.show = true;
         }
         const handleGuide = ()=>{
@@ -51,7 +52,7 @@ export default {
         const handleEnv = ()=>{
             const name = projects.value.page.path.split('/').filter(item=>item && item!='.')[0];
             projects.value.editor.path =`./${name}/env`;
-            projects.value.editor.remark = '环境变量';
+            projects.value.editor.remark = t('action.envVars');
             projects.value.editor.show = true;
         }
 

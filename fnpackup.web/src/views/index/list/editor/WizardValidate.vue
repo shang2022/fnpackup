@@ -2,8 +2,8 @@
     <template v-for="(rule,index) in item.rules" v-if="item.rules.length > 0">
         <el-row class="w-100">
             <el-col :span="7">
-                <el-form-item label="验证类型">
-                    <el-select v-model="rule._type" placeholder="请选择" size="small">
+                <el-form-item :label="$t('wizard.validateType')">
+                    <el-select v-model="rule._type" :placeholder="$t('wizard.choose')" size="small">
                         <el-option v-for="(vt) in vtypes" :key="vt.value" :label="vt.label" :value="vt.value"></el-option>
                     </el-select>
                 </el-form-item> 
@@ -11,7 +11,7 @@
             <el-col :span="14">
                 <template v-if="rule._type == 'required'">
                     <el-row class="mgl-1">
-                        <el-col :span="6"><el-checkbox v-model="rule._required">必填</el-checkbox></el-col>
+                        <el-col :span="6"><el-checkbox v-model="rule._required">{{ $t('wizard.required') }}</el-checkbox></el-col>
                         <el-col :span="18"><el-input v-model="rule._required_message" size="small"/></el-col>
                     </el-row>
                     
@@ -65,6 +65,7 @@
 import { Delete,Plus } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus';
 import { useLogger } from '../../logger';
+import { t } from '@/i18n';
 export default {
     props: ['item','types','vtypes'],
     components:{ Delete,Plus},
@@ -98,12 +99,12 @@ export default {
         });
 
         const handleAdd = (index)=>{
-            props.item.rules.splice(index+1,0,buildValidateField({'required':true,message:'请输入内容'}));
+            props.item.rules.splice(index+1,0,buildValidateField({'required':true,message:t('wizard.inputContent')}));
         }
         const handleDel = (index)=>{
-            ElMessageBox.confirm('确定要删除吗？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            ElMessageBox.confirm(t('common.deleteConfirm'), t('common.tips'), {
+                confirmButtonText: t('common.ok'),
+                cancelButtonText: t('common.cancel'),
                 type: 'warning',
             }).then(() => {
                 props.item.rules.splice(index,1);

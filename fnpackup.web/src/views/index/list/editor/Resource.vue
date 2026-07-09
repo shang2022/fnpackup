@@ -1,6 +1,6 @@
 <template>
     <div class="resource-wrap h-100 scrollbar">
-        <el-form ref="ruleFormRef"  :model="state.ruleForm" :rules="state.rules" label-width="110">
+        <el-form ref="ruleFormRef"  :model="state.ruleForm" :rules="state.rules" label-width="140">
             <ResourceDocker v-if="state.docker" :data="state.ruleForm['docker-project']['projects']"></ResourceDocker>
             <ResourceShare :data="state.ruleForm['data-share']['shares']"></ResourceShare>
             <ResourceLinker :data="state.ruleForm['usr-local-linker']"></ResourceLinker>

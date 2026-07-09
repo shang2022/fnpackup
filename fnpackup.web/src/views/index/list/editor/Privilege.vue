@@ -1,16 +1,16 @@
 <template>
     <div class="privilege-wrap">
-        <el-form ref="ruleFormRef"  :model="state.ruleForm" :rules="state.rules" label-width="110">
-            <el-form-item label="权限" prop="run-as">
+        <el-form ref="ruleFormRef"  :model="state.ruleForm" :rules="state.rules" label-width="120">
+            <el-form-item :label="$t('privilege.permission')" prop="run-as">
                 <el-select v-model="state.ruleForm.defaults['run-as']">
-                    <el-option key="package" label="应用用户" value="package"></el-option>
+                    <el-option key="package" :label="$t('privilege.appUser')" value="package"></el-option>
                     <el-option key="root" label="root" value="root"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="应用用户名" prop="username">
+            <el-form-item :label="$t('privilege.username')" prop="username">
                 <el-input v-model="state.ruleForm.username" />
             </el-form-item>
-            <el-form-item label="应用用户组名" prop="groupname">
+            <el-form-item :label="$t('privilege.groupname')" prop="groupname">
                 <el-input v-model="state.ruleForm.groupname" />
             </el-form-item>
         </el-form>

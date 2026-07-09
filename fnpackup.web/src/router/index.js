@@ -4,13 +4,13 @@ const routes = [
     {
         path: '/',
         name: 'Index',
-        meta: { title: '打包fpk',icon:Pointer },
+        meta: { titleKey: 'route.pack',icon:Pointer },
         component: () => import('@/views/index/Index.vue'),
     },
     {
         path: '/static',
         name: 'Static',
-        meta: { title: '静态托管',icon:Service },
+        meta: { titleKey: 'route.static',icon:Service },
         component: () => import('@/views/static/Index.vue'),
     },
     {
@@ -21,7 +21,7 @@ const routes = [
     // {
     //     path: '/logger',
     //     name: 'Logger',
-    //     meta: { title: '日志收集',icon:FirstAidKit },
+    //     meta: { titleKey: 'route.logger',icon:FirstAidKit },
     //     component: () => import('@/views/logger/Index.vue'),
     // }
 ]

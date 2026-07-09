@@ -1,12 +1,12 @@
 <template>
-    <el-dialog v-model="state.show" :title="`源码编辑器[${projects.editor.remark}]`" width="50%"
+    <el-dialog v-model="state.show" :title="$t('editor.sourceTitle', { remark: projects.editor.remark })" width="50%"
      top="1vh" 
     :close-on-click-modal="false" :close-on-press-escape="false"  draggable class="source-dialog">
         <template v-if="state.show">
             <template v-if="state.content !== undefined">
                 <Source :path="state.path" :content="state.content" ref="source"></Source>
                 <div class="t-c mgt-1">
-                    <el-button type="primary" @click="handleSave" :loading="state.loading">确定保存</el-button>
+                    <el-button type="primary" @click="handleSave" :loading="state.loading">{{ $t('editor.confirmSave') }}</el-button>
                 </div>
             </template>
         </template>
@@ -20,6 +20,7 @@ import Source from './Source.vue';
 import { fetchFileRead, fetchFileWrite } from '@/api/api';
 import { useLogger } from '../../logger';
 import { ElMessage } from 'element-plus';
+import { t } from '@/i18n';
 export default {
     components:{Source},
     props:['modelValue'],
@@ -52,8 +53,8 @@ export default {
                         logger.value.error(res);
                     }else{
                         state.show = false;
-                        ElMessage.success('保存成功');
-                        logger.value.success(`保存成功`);
+                        ElMessage.success(t('common.saveSuccess'));
+                        logger.value.success(t('common.saveSuccess'));
                         projects.value.load();
                     }
                 }).catch((e)=>{

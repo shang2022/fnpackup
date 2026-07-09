@@ -8,7 +8,7 @@
                 <a href="javascript:;" @click="handleRefresh"><el-icon><Refresh /></el-icon></a>
             </el-breadcrumb-item>
             <el-breadcrumb-item>
-                <a href="javascript:;" @click="handleFolder(0)"><el-icon><Pointer /></el-icon>应用列表</a>
+                <a href="javascript:;" @click="handleFolder(0)"><el-icon><Pointer /></el-icon>{{ $t('project.appList') }}</a>
             </el-breadcrumb-item>
             <template v-for="(value,index) in paths">
                 <el-breadcrumb-item @click="handleFolder(index+1)">

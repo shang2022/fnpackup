@@ -1,0 +1,21 @@
+[common]
+display_name="在线fpk"
+desc="<p><strong>[😂]简介 : </strong>fnpack二次包装UI，在线编辑和打包fpk，和帮助fpk自动托管静态资源，应用中心更新可能不及时，有问题可以去源码处下载最新fpk。</p><p><strong>[🍚]恰饭 : </strong>作者可以帮忙打包fpk，￥30/次</p><p><strong>[🔋]为爱发电 : </strong><a href="https://jq.qq.com/?_wv=1027&k=ucoIVfz4" target="_blank">群聊：1121552990</a>，<a href="https://github.com/snltty/fnpackup" target="_blank">开源</a></p>"
+
+[install]
+stepTitle="关于静态托管的提示"
+helpText="如果需要动态托管应用的静态资源，请将需要托管的应用与在线fpk安装在同一空间"
+label="飞牛端口"
+message="请输入飞牛端口"
+helpText1="如果自定义了飞牛端口，填写一下"
+
+[uninstall]
+stepTitle="确认卸载"
+helpText="您即将卸载此应用。请选择如何处理应用数据，<strong>警告：</strong> 选择删除数据后，所有应用数据将永久丢失，无法恢复。"
+label="配置保留选项"
+optionLabel="保留配置"
+optionLabel1="删除配置"
+message="请选择配置保留选项"
+
+[entry]
+title="在线fpk"

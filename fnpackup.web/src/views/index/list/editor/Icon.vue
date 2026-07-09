@@ -4,36 +4,36 @@
             <img :src="state.fileShowImage"></img>
             <div class="drag" v-if="state.draging"></div>
         </div>
-        <p class="t-c">点击选择或拖拽图片上传，自动转PNG，自动裁剪为正方形</p>
+        <p class="t-c">{{ $t('icon.chooseImageTip') }}</p>
         <div class="flex args">
-            <div>尺寸:</div>
+            <div>{{ $t('icon.size') }}</div>
             <div class="number">
                 <el-input-number size="small" @change="handleArgChange" v-model="state.size" :min="32" :max="8192" controls-position="right" />
             </div>
             <div class="split"></div>
-            <div>圆角:</div>
+            <div>{{ $t('icon.radius') }}</div>
             <div class="flex-1 mgl-2">
                 <el-slider v-model="state.radius"  @change="handleArgChange" size="small" :min="0" :max="state.size/2" />
             </div>
         </div>
     </div>
     <div class="t-c">
-        <el-button type="primary" @click="handleSave" :loading="state.loading">确定保存</el-button>
+        <el-button type="primary" @click="handleSave" :loading="state.loading">{{ $t('editor.confirmSave') }}</el-button>
     </div>
     <el-dialog v-model="state.showSave" width="360" top="1vh"
     :close-on-click-modal="false" :close-on-press-escape="false" draggable>
-        <el-descriptions title="选择保存项" :column="1" size="small" border class="w-100" :label-width="80">
-            <el-descriptions-item label="小图缩放吗">
+        <el-descriptions :title="$t('icon.saveSelected')" :column="1" size="small" border class="w-100" :label-width="80">
+            <el-descriptions-item :label="$t('icon.smallScale')">
                 <div class="flex">
                     <el-radio-group v-model="state.toSmall" size="small" @change="handleSmallChange">
-                        <el-radio :value="1" size="large" class="mgr-1">不变</el-radio>
+                        <el-radio :value="1" size="large" class="mgr-1">{{ $t('icon.unchanged') }}</el-radio>
                         <el-radio :value="0.5" size="large" class="mgr-1">1/2</el-radio>
                         <el-radio :value="0.25" size="large" class="mgr-1">1/4</el-radio>
                         <el-radio :value="0.125" size="large">1/8</el-radio>
                     </el-radio-group>
                 </div>
             </el-descriptions-item>
-            <el-descriptions-item label="保存项">
+            <el-descriptions-item :label="$t('icon.saveItems')">
                 <div class="flex">
                     <template v-for="icon in state.icons">
                         <el-checkbox v-model="icon.use" size="small">{{icon.name}}</el-checkbox>
@@ -46,7 +46,7 @@
                     <template v-if="state.loading">
                         {{ state.process.progress }}
                     </template>
-                    <template v-else>确定保存</template>
+                    <template v-else>{{ $t('editor.confirmSave') }}</template>
                 </el-button>
             </el-descriptions-item>
         </el-descriptions>
@@ -60,6 +60,7 @@ import { useLogger } from '../../logger';
 import { ElMessage, ElNotification } from 'element-plus';
 import { fetchFileUpload, xhrApi } from '@/api/api';
 import { useProjects } from '../list';
+import { t } from '@/i18n';
 
 export default {
     match:/(ICON|icon).*(PNG|png)$/,
@@ -73,10 +74,10 @@ export default {
         const root = projects.value.page.root.join('/');
         const defaultOption = props.path.replace(root,'');
         const icons = [
-            {name:'应用大图标',path:`${root}/ICON_256.PNG`,use:defaultOption == '/ICON_256.PNG',size:256},
-            {name:'应用小图标',path:`${root}/ICON.PNG`,use:defaultOption == '/ICON.PNG',size:256,small:true},
-            {name:'入口大图标',path:`${root}/app/ui/images/icon_256.png`,use:defaultOption == '/app/ui/images/icon_256.png',size:256},
-            {name:'入口小图标',path:`${root}/app/ui/images/icon_64.png`,use:defaultOption == '/app/ui/images/icon_64.png',size:256,small:true},
+            {name:t('icon.appLarge'),path:`${root}/ICON_256.PNG`,use:defaultOption == '/ICON_256.PNG',size:256},
+            {name:t('icon.appSmall'),path:`${root}/ICON.PNG`,use:defaultOption == '/ICON.PNG',size:256,small:true},
+            {name:t('icon.entryLarge'),path:`${root}/app/ui/images/icon_256.png`,use:defaultOption == '/app/ui/images/icon_256.png',size:256},
+            {name:t('icon.entrySmall'),path:`${root}/app/ui/images/icon_64.png`,use:defaultOption == '/app/ui/images/icon_64.png',size:256,small:true},
         ];
 
         const state = reactive({
@@ -113,7 +114,7 @@ export default {
         const handleConfirmIcon = async ()=>{ 
             const icons = state.icons.filter(c=>c.use);
             if(icons.length == 0){
-                ElMessage.error('请选择保存项');
+                ElMessage.error(t('common.selectSaveItem'));
                 return;
             }
             state.loading = true;
@@ -122,11 +123,11 @@ export default {
                 if(index > icons.length-1){
                     state.loading = false;
                     state.showSave = false;
-                    logger.value.success(`已上传${icons.length}个文件`);
+                    logger.value.success(t('common.uploadedFiles', { count: icons.length }));
                     ElNotification({
                         type: 'success',
-                        title: '文件上传',
-                        message: `已上传${icons.length}个文件`,
+                        title: t('common.fileUpload'),
+                        message: t('common.uploadedFiles', { count: icons.length }),
                         duration:3000,
                     });
                     return;
@@ -147,12 +148,12 @@ export default {
                         });
                     }else{
                         state.process.progress = `100%`;
-                        logger.value.success(`已上传:${fileObj.path}`);
+                        logger.value.success(t('common.uploadedFile', { name: fileObj.path }));
                         nextTick(()=>{
                             ElNotification({
                                 type: 'success',
-                                title: '文件上传',
-                                message: `已上传:${fileObj.path}`,
+                                title: t('common.fileUpload'),
+                                message: t('common.uploadedFile', { name: fileObj.path }),
                                 duration:3000,
                             });
                         });
@@ -330,23 +331,23 @@ export default {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(image, 0, 0);
                 
-                // 2. 创建反蒙版（圆角外部为白色）
+                // Create an inverse mask where the outside of the rounded rect is opaque.
                 const inverseMask = document.createElement('canvas');
                 const inverseCtx = inverseMask.getContext('2d');
                 inverseMask.width = canvas.width;
                 inverseMask.height = canvas.height;
                 
-                // 填充黑色背景
+                // Fill the mask background.
                 inverseCtx.fillStyle = 'black';
                 inverseCtx.fillRect(0, 0, inverseMask.width, inverseMask.height);
                 
-                // 在黑色背景上挖出白色圆角矩形
+                // Cut the rounded rectangle out of the mask.
                 inverseCtx.globalCompositeOperation = 'destination-out';
                 inverseCtx.fillStyle = 'white';
                 createRoundedRectPath(inverseCtx, 0, 0, inverseMask.width, inverseMask.height, radius);
                 inverseCtx.fill();
                 
-                // 3. 使用source-out模式擦除非圆角部分
+                // Erase the area outside the rounded rectangle.
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.drawImage(inverseMask, 0, 0);
                 ctx.globalCompositeOperation = 'source-over';

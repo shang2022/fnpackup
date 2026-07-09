@@ -1,7 +1,7 @@
 <template>
     <el-tabs v-model="state.key" type="border-card" class="h-100 ui-tab"  editable @edit="handleEdit">
         <el-tab-pane :label="value._key" :name="value._id" :key="index" v-for="(value,index) in state.values" class="h-100">
-            <el-form ref="ruleFormRef" label-width="80" class="ui-form h-100 flex flex-column flex-nowrap">
+            <el-form ref="ruleFormRef" label-width="120" class="ui-form h-100 flex flex-column flex-nowrap">
                 <div class="fields flex-1 scrollbar mgb-1">
                     <UIConfigItem :item="value"></UIConfigItem>
                 </div>
@@ -16,9 +16,10 @@ import { useLogger } from '../../logger';
 import {Edit,CircleCloseFilled,CirclePlusFilled} from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus';
 import UIConfigItem from './UIConfigItem.vue';
+import { t } from '@/i18n';
 export default {
     match:/\/ui\/config$/,
-    width:550,
+    width:650,
     height:660,
     components: { Edit,CircleCloseFilled,CirclePlusFilled ,UIConfigItem},
     props:['path','content'],
@@ -76,9 +77,9 @@ export default {
     
         const handleEdit = (_id,action) => {
             if(action == 'add'){
-                ElMessageBox.prompt(`输入入口标识,必须以{appname}.开头`, '添加入口', {
-                    confirmButtonText: '确认',
-                    cancelButtonText: '取消',
+                ElMessageBox.prompt(t('uiConfig.addEntryPrompt'), t('uiConfig.addEntry'), {
+                    confirmButtonText: t('common.confirm'),
+                    cancelButtonText: t('common.cancel'),
                     draggable:true,
                     inputValue: `${state.values.filter(item=>item._id == state.key)[0]._key.split('.')[0]}.`,
                     customStyle: {
@@ -102,9 +103,9 @@ export default {
                 if(state.values.length <= 1){
                     return;
                 }
-                ElMessageBox.confirm('确定要删除该入口吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                ElMessageBox.confirm(t('uiConfig.deleteEntryConfirm'), t('common.tips'), {
+                    confirmButtonText: t('common.ok'),
+                    cancelButtonText: t('common.cancel'),
                     type: 'warning',
                     draggable:true,
                     customStyle: {

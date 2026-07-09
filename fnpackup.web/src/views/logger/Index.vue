@@ -5,19 +5,19 @@
                 <el-select v-model="state.page.type" @change="getList" size="small" class="w-10">
                     <el-option v-for="(option,index) in state.types" :key="index" :label="option.label" :value="option.value"></el-option>
                 </el-select>
-                <el-input v-model="state.page.text" @change="getList" placeholder="文本" size="small" class="w-10 mgl-1"></el-input>
+                <el-input v-model="state.page.text" @change="getList" :placeholder="$t('loggerPage.text')" size="small" class="w-10 mgl-1"></el-input>
                 <el-button plain type="primary" size="small" :loading="state.loading" @click="getList" class="mgl-1"><el-icon><Refresh></Refresh></el-icon></el-button>
-                <el-button plain size="small" @click="handleInfo" class="mgl-1"><el-icon><InfoFilled></InfoFilled></el-icon>相关说明</el-button>
+                <el-button plain size="small" @click="handleInfo" class="mgl-1"><el-icon><InfoFilled></InfoFilled></el-icon>{{ $t('loggerPage.info') }}</el-button>
             </div>
             <div class="flex-1 relative">
                 <div class="absolute flex flex-column flex-nowrap">
                     <el-table :data="state.page.list" size="small" height="100%" v-loading="state.loading" @row-click="handleRowClick" :row-class-name="tableRowClassName">
-                        <el-table-column prop="type" label="类别" width="80">
+                        <el-table-column prop="type" :label="$t('loggerPage.type')" width="80">
                             <template #default="scope">
                                 <span>{{state.type2text[scope.row.type]}} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="msg" label="内容"></el-table-column>
+                        <el-table-column prop="msg" :label="$t('loggerPage.content')"></el-table-column>
                     </el-table>
                     <div class="pages">
                         <div>
@@ -36,23 +36,23 @@
             <textarea class="logger-msg">{{ state.msg }}</textarea>
         </div>
     </el-dialog>
-    <el-dialog class="options-center" title="相关说明" destroy-on-close v-model="state.showInfo" top="2vh" width="560">
+    <el-dialog class="options-center" :title="$t('loggerPage.info')" destroy-on-close v-model="state.showInfo" top="2vh" width="560">
         <div>
-            <h3>日志管道</h3>
-            <p>在安装空间下</p>
+            <h3>{{ $t('loggerPage.pipe') }}</h3>
+            <p>{{ $t('loggerPage.underInstallSpace') }}</p>
             <ul>
-                <li>调试: /var/apps/fnpackup/shares/fnpackup-docker/logs/debug.log</li>
-                <li>信息: /var/apps/fnpackup/shares/fnpackup-docker/logs/info.log</li>
-                <li>警告: /var/apps/fnpackup/shares/fnpackup-docker/logs/warning.log</li>
-                <li>错误: /var/apps/fnpackup/shares/fnpackup-docker/logs/error.log</li>
-                <li>致命: /var/apps/fnpackup/shares/fnpackup-docker/logs/fatal.log</li>
+                <li>{{ $t('loggerPage.debug') }}: /var/apps/fnpackup/shares/fnpackup-docker/logs/debug.log</li>
+                <li>{{ $t('loggerPage.information') }}: /var/apps/fnpackup/shares/fnpackup-docker/logs/info.log</li>
+                <li>{{ $t('loggerPage.warning') }}: /var/apps/fnpackup/shares/fnpackup-docker/logs/warning.log</li>
+                <li>{{ $t('loggerPage.error') }}: /var/apps/fnpackup/shares/fnpackup-docker/logs/error.log</li>
+                <li>{{ $t('loggerPage.fatal') }}: /var/apps/fnpackup/shares/fnpackup-docker/logs/fatal.log</li>
             </ul>
-            <h3>写入示例</h3>
+            <h3>{{ $t('loggerPage.writeExample') }}</h3>
             <ul>
-                <li>标准: command > /var/apps/fnpackup/shares/fnpackup-docker/logs/debug.log</li>
-                <li>标准: command 1> /var/apps/fnpackup/shares/fnpackup-docker/logs/debug.log</li>
-                <li>错误: command 2> /var/apps/fnpackup/shares/fnpackup-docker/logs/error.log</li>
-                <li>标准+错误: command > /var/apps/fnpackup/shares/fnpackup-docker/logs/error.log 2>&1</li>
+                <li>{{ $t('loggerPage.standard') }}: command > /var/apps/fnpackup/shares/fnpackup-docker/logs/debug.log</li>
+                <li>{{ $t('loggerPage.standard') }}: command 1> /var/apps/fnpackup/shares/fnpackup-docker/logs/debug.log</li>
+                <li>{{ $t('loggerPage.stderr') }}: command 2> /var/apps/fnpackup/shares/fnpackup-docker/logs/error.log</li>
+                <li>{{ $t('loggerPage.stdoutStderr') }}: command > /var/apps/fnpackup/shares/fnpackup-docker/logs/error.log 2>&1</li>
             </ul>
         </div>
     </el-dialog>
@@ -62,11 +62,12 @@
 import { fetchLoggerList } from '@/api/api';
 import { InfoFilled, Refresh } from '@element-plus/icons-vue';
 import { onMounted, reactive} from 'vue';
+import { t } from '@/i18n';
 export default {
     components:{Refresh,InfoFilled},
     setup () {
 
-        const types = ['全部','debug','info','warning','error','fatal'];
+        const types = [t('loggerPage.all'),'debug','info','warning','error','fatal'];
         const state = reactive({
             types:types.map((c,index)=> { return {label:c,value:index} } ),
             type2text:types,

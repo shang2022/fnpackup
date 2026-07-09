@@ -22,6 +22,7 @@ import { useLogger } from '../../logger';
 import { useProjects } from '../list';
 import Wizard from './Wizard.vue';
 import {fetchFileRead } from '@/api/api';
+import { t } from '@/i18n';
 
 export default {
     match:/\/wizard/,
@@ -41,10 +42,10 @@ export default {
             root: root,
             type:'',
             types:[
-                {label:'安装向导',key:'install'},
-                {label:'卸载向导',key:'uninstall'},
-                {label:'更新向导',key:'upgrade'},
-                {label:'配置向导',key:'config'}
+                {label:t('wizard.install'),key:'install'},
+                {label:t('wizard.uninstall'),key:'uninstall'},
+                {label:t('wizard.upgrade'),key:'upgrade'},
+                {label:t('wizard.config'),key:'config'}
             ],
             loading:false,
             contents:{},

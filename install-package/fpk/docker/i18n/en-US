@@ -1,0 +1,21 @@
+[common]
+display_name="Packup fpk"
+desc="<p><strong>[😂] Intro : </strong>fnpack secondary packaging UI, online editing and packaging of FPK, and helping FPK automatically host static resources. App center updates may not be timely; if there are issues, you can download the latest FPK from the source code.</p><p><strong>[🍚] Support : </strong>The author can help package FPK for ¥30/time</p><p><strong>[🔋] Open Source : </strong><a href="https://jq.qq.com/?_wv=1027&k=ucoIVfz4" target="_blank">QQ Group: 1121552990</a>, <a href="https://github.com/snltty/fnpackup" target="_blank">Source Code</a></p>"
+
+[install]
+stepTitle="Static Hosting Notice"
+helpText="If you need to dynamically host static resources for your app, please install the Online FPK app in the same volume as the app you want to host."
+label="System Port"
+message="Please enter the System port"
+helpText1="If you have customized the System port, please enter it here"
+
+[uninstall]
+stepTitle="Confirm Uninstallation"
+helpText="You are about to uninstall this app. Please choose how to handle app data. <strong>Warning:</strong> If you choose to delete data, all app data will be permanently lost and cannot be recovered."
+label="Configuration Retention Option"
+optionLabel="Keep Configuration"
+optionLabel1="Delete Configuration"
+message="Please select a configuration retention option"
+
+[entry]
+title="Packup fpk"

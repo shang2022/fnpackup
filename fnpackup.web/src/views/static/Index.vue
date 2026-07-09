@@ -2,23 +2,23 @@
     <div class="table-wrap h-100">
         <div class="inner h-100 flex flex-column flex-nowrap">
             <div class="head">
-                <el-button plain type="primary" size="small" :loading="state.loading" @click="handleSearch"><el-icon><Refresh></Refresh></el-icon>重载托管和刷新列表</el-button>
-                <span class="tips">每60s自动重载一次，也可以手动重载</span>
+                <el-button plain type="primary" size="small" :loading="state.loading" @click="handleSearch"><el-icon><Refresh></Refresh></el-icon>{{ $t('static.reloadAndRefresh') }}</el-button>
+                <span class="tips">{{ $t('static.reloadTip') }}</span>
             </div>
             <div class="flex-1 relative">
                 <div class="absolute">
                     <el-table :data="state.list" size="small" height="98%" v-loading="state.loading">
-                        <el-table-column prop="name" label="名称">
+                        <el-table-column prop="name" :label="$t('static.name')">
                             <template #default="scope">
                                 <div class="flex">
                                     <span>{{scope.row.name}}</span>
-                                    <router-link :to="{name:'StaticView',query:{name:scope.row.name}}" class="mgl-2 a-line">内嵌打开</router-link>
-                                    <a :href="`${state.baseUrl}/${scope.row.name}/?t=${Date.now()}`" target="_blank" class="mgl-1 a-line">新窗口打开</a>
+                                    <router-link :to="{name:'StaticView',query:{name:scope.row.name}}" class="mgl-2 a-line">{{ $t('static.openEmbedded') }}</router-link>
+                                    <a :href="`${state.baseUrl}/${scope.row.name}/?t=${Date.now()}`" target="_blank" class="mgl-1 a-line">{{ $t('static.openNewWindow') }}</a>
                                 </div>
                                 
                             </template>
                         </el-table-column>
-                        <el-table-column prop="root" label="根目录"></el-table-column>
+                        <el-table-column prop="root" :label="$t('static.root')"></el-table-column>
                     </el-table>
                 </div>
             </div>
@@ -31,6 +31,7 @@ import {fetchStaticList, fetchStaticSearch } from '@/api/api';
 import { Refresh } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { onMounted, reactive} from 'vue';
+import { t } from '@/i18n';
 export default {
     components:{Refresh},
     setup () {
@@ -68,7 +69,7 @@ export default {
         const handleSearch = () => { 
             search().then(()=>{
                 getList().then(()=>{
-                    ElMessage.success('已重载');
+                    ElMessage.success(t('static.reloaded'));
                 });
             });
         }

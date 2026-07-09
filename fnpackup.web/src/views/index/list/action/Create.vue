@@ -1,25 +1,25 @@
 <template>
-    <el-dialog v-model="state.show" title="创建应用" width="280" :close-on-click-modal="false" :close-on-press-escape="false"  draggable>
+    <el-dialog v-model="state.show" :title="$t('create.title')" width="280" :close-on-click-modal="false" :close-on-press-escape="false"  draggable>
         <div>
             <el-form :model="state.createForm" :rules="state.createRules" ref="ruleFormRef"  label-width="50">
-                <el-form-item label="名称" prop="name">
+                <el-form-item :label="$t('create.name')" prop="name">
                     <el-input v-model="state.createForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="">
                     <el-radio-group v-model="state.createForm.docker">
-                        <el-radio :value="true" class="mgr-1">Docker应用</el-radio>
-                        <el-radio :value="false">原生应用</el-radio>
+                        <el-radio :value="true" class="mgr-1">{{ $t('create.dockerApp') }}</el-radio>
+                        <el-radio :value="false">{{ $t('create.nativeApp') }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="">
                     <el-radio-group v-model="state.createForm.ui">
-                        <el-radio :value="true" class="mgr-1">有ui入口</el-radio>
-                        <el-radio :value="false">无入口</el-radio>
+                        <el-radio :value="true" class="mgr-1">{{ $t('create.withUi') }}</el-radio>
+                        <el-radio :value="false">{{ $t('create.noEntry') }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item>
-                    <el-button plain @click="state.show = false">取消</el-button>
-                    <el-button plain type="primary" @click="handleSubmit" :loading="state.loading">确认创建</el-button>
+                    <el-button plain @click="state.show = false">{{ $t('common.cancel') }}</el-button>
+                    <el-button plain type="primary" @click="handleSubmit" :loading="state.loading">{{ $t('create.submit') }}</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -32,6 +32,7 @@ import {Plus,Refresh} from '@element-plus/icons-vue'
 import { useLogger } from '../../logger';
 import { useProjects } from '../list';
 import { fetchProjectCreate } from '@/api/api';
+import { t } from '@/i18n';
 export default {
     props: ['modelValue'],
     emits: ['update:modelValue'],
@@ -50,7 +51,7 @@ export default {
             },
             createRules:{
                 name:[
-                    {required: true, message: '请输入应用名', trigger: 'blur'}
+                    {required: true, message: t('create.nameRequired'), trigger: 'blur'}
                 ]
             }
         });

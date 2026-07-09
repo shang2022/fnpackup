@@ -1,17 +1,21 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import { elementLocale, i18n, currentLocale } from './i18n'
 
 const app = createApp(App);
 
 import router from './router'
 app.use(router);
+app.use(i18n);
 
 import './assets/style.css'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/display.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
-app.use(ElementPlus, { size: 'default' });
+app.use(ElementPlus, { size: 'default', locale: elementLocale });
+
+document.documentElement.lang = currentLocale;
 
 app.mount('#app');
 
@@ -20,7 +24,7 @@ app.directive('trim', {
     mounted(el, binding) {
         const inputEl = el.querySelector('input');
         if (!inputEl) {
-            console.error('v-trim 指令只能用于包含 input 的元素');
+            console.error('v-trim directive can only be used on an element that contains an input');
             return;
         }
         const trimHandler =  () => {

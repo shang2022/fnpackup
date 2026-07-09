@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="state.show" title="编译中" width="50%"
+    <el-dialog v-model="state.show" :title="$t('editor.compiling')" width="50%"
      top="1vh" 
     :close-on-click-modal="false" :close-on-press-escape="false"  draggable class="terminal-dialog">
         <template v-if="state.show">
@@ -13,6 +13,7 @@ import { nextTick, onMounted, reactive, ref } from 'vue';
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import '@xterm/xterm/css/xterm.css'
+import { t } from '@/i18n';
 export default {
     setup () {
         
@@ -22,8 +23,8 @@ export default {
         const terminalRef = ref(null);
         const fitAddon = new FitAddon();
         const terminal = new Terminal({
-            cursorBlink: false,      // 隐藏光标
-            disableStdin: true,      // 禁用输入
+            cursorBlink: false,
+            disableStdin: true,
             allowTransparency: true,
             scrollback:false
         });
@@ -34,7 +35,7 @@ export default {
                 terminal.loadAddon(fitAddon);
                 terminal.open(terminalRef.value);
                 fitAddon.fit();
-                terminal.write("正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...正在编译中...")
+                terminal.write(Array(16).fill(t('editor.compilingText')).join(''))
             });
         })
 

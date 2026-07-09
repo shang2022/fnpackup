@@ -25,6 +25,7 @@ import { ElMessageBox, ElOption, ElSelect } from 'element-plus';
 import I18nItem from './I18nItem.vue';
 import { fetchFileCreate, fetchFileDelete, fetchFileList, fetchFileRead } from '@/api/api';
 import { useProjects } from '../list';
+import { currentLocale, t } from '@/i18n';
 export default {
     match:/i18n/,
     width:550,
@@ -505,7 +506,7 @@ const local_en = {
         const logger = useLogger();
         const state = reactive({
             keys:[],
-            labels:navigator.language == defaultLanguage ? local_en : local_cn,
+            labels:currentLocale == 'zh-CN' ? local_cn : local_en,
             key:current_name,
             content:{},
             loading:false,
@@ -603,7 +604,7 @@ const local_en = {
                 const labels = Object.keys(state.labels).filter(c=>state.keys.includes(c)==false);
                 state.newValue = labels[0];
                 ElMessageBox({
-                    title:'选择要添加的语言',
+                    title:t('i18nEditor.addLanguage'),
                     draggable:true,
                     message:()=>h(ElSelect,{
                         modelValue:state.newValue,
@@ -615,7 +616,7 @@ const local_en = {
                         beforeClose: (action, instance, done) => {
                             if (action === 'confirm') {
                                 if (!state.newValue) {
-                                    instance.message = '请选择一项'
+                                    instance.message = t('common.selectOne')
                                     return
                                 }
                                 
@@ -641,9 +642,9 @@ const local_en = {
                 }).catch(()=>{});
             }else if(action == 'remove'){
                 if(_id == 'en-US') return;
-                ElMessageBox.confirm('确定要删除该语言吗吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                ElMessageBox.confirm(t('i18nEditor.deleteLanguageConfirm'), t('common.tips'), {
+                    confirmButtonText: t('common.ok'),
+                    cancelButtonText: t('common.cancel'),
                     type: 'warning',
                     draggable:true,
                     customStyle: {

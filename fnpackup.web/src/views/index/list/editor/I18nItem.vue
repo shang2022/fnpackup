@@ -31,6 +31,7 @@ import { ElMessageBox } from 'element-plus';
 import { reactive } from 'vue';
 import { useLogger } from '../../logger';
 import { Plus,Delete } from '@element-plus/icons-vue';
+import { t } from '@/i18n';
 export default {
     props: ['content'],
     components:{Plus,Delete},
@@ -45,9 +46,9 @@ export default {
 
         const handleEdit = (_id,action) => {
             if(action == 'add'){
-                ElMessageBox.prompt(`输入分组名`, '添加分组', {
-                    confirmButtonText: '确认',
-                    cancelButtonText: '取消',
+                ElMessageBox.prompt(t('i18nEditor.addGroupPrompt'), t('i18nEditor.addGroup'), {
+                    confirmButtonText: t('common.confirm'),
+                    cancelButtonText: t('common.cancel'),
                     draggable:true,
                     customStyle: {
                         'vertical-align':'unset'
@@ -62,9 +63,9 @@ export default {
                     logger.value.error(`${e}`);
                 })
             }else if(action == 'remove'){
-                ElMessageBox.confirm('确定要删除该分组吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                ElMessageBox.confirm(t('i18nEditor.deleteGroupConfirm'), t('common.tips'), {
+                    confirmButtonText: t('common.ok'),
+                    cancelButtonText: t('common.cancel'),
                     type: 'warning',
                     draggable:true,
                     customStyle: {
@@ -83,9 +84,9 @@ export default {
             }
         }
         const handleAdd = (key,index)=>{
-            ElMessageBox.prompt(`输入字段名`, '添加字段', {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
+            ElMessageBox.prompt(t('i18nEditor.addFieldPrompt'), t('i18nEditor.addField'), {
+                confirmButtonText: t('common.confirm'),
+                cancelButtonText: t('common.cancel'),
                 draggable:true,
                 customStyle: {
                     'vertical-align':'unset'
@@ -102,9 +103,9 @@ export default {
            
         }
         const handleDel = (key,index)=>{
-            ElMessageBox.confirm(`确定要删除[${key}]字段吗？`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            ElMessageBox.confirm(t('i18nEditor.deleteFieldConfirm', { field: key }), t('common.tips'), {
+                confirmButtonText: t('common.ok'),
+                cancelButtonText: t('common.cancel'),
                 type: 'warning',
                 draggable:true,
                 customStyle: {

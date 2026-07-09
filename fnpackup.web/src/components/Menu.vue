@@ -7,7 +7,7 @@
                         <el-icon size="16">
                             <component :is="item.meta.icon"></component>
                         </el-icon>
-                        <span>{{item.meta.title}}</span>
+                        <span>{{ $t(item.meta.titleKey) }}</span>
                     </router-link>
                 </li>
             </template>
@@ -15,29 +15,29 @@
         <div class="foot-wrap">
             <a href="javascript:;" @click="handlePay">
                 <img src="../assets/money.svg" class="img-big">
-                <span>慷慨赞助</span>
+                <span>{{ $t('menu.donate') }}</span>
             </a>
             <a href="https://linker.snltty.com" target="_blank">
                 <img src="../assets/github.svg" class="img">
-                <span>开源组网</span>
+                <span>{{ $t('menu.linker') }}</span>
             </a>
             <a href="https://tun324.snltty.com/" target="_blank">
                 <img src="../assets/github.svg" class="img">
-                <span>tun转代理</span>
+                <span>{{ $t('menu.tunProxy') }}</span>
             </a>
             <a href="https://github.com/snltty/fnpackup" target="_blank">
                 <img src="../assets/github.svg" class="img">
-                <span>在线fpk {{ state.version }}</span>
+                <span>{{ $t('menu.onlineFpk', { version: state.version }) }}</span>
             </a>
         </div>
     </div>
-    <el-dialog v-model="state.showPay" title="慷慨赞助" width="356">
+    <el-dialog v-model="state.showPay" :title="$t('menu.donate')" width="356">
         <div class="pay">
             <p class="t-c mgb-1">
-                程序本身完全开源免费
+                {{ $t('menu.donateText1') }}
             </p>
             <p class="t-c mgb-1">
-                但也可以作者帮忙打包，￥30/次，OR，纯慷慨赞助
+                {{ $t('menu.donateText2') }}
             </p>
             <p>
                 <img src="pay.png" alt="pay" width="100%"/>

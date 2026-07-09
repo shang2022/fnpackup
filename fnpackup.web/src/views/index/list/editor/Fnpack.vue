@@ -1,11 +1,11 @@
 <template>
     <div class="fnpack-wrap h-100">
         <el-descriptions :column="1" size="small" border class="w-100" :label-width="70">
-            <el-descriptions-item label="发布模式">
-                <el-switch v-model="state.platform" active-text="多平台" inactive-text="单平台"/>
+            <el-descriptions-item :label="$t('fnpack.releaseMode')">
+                <el-switch v-model="state.platform" :active-text="$t('fnpack.multiPlatform')" :inactive-text="$t('fnpack.singlePlatform')"/>
             </el-descriptions-item>
             <template v-if="state.platform">
-                <el-descriptions-item label="已找到">
+                <el-descriptions-item :label="$t('fnpack.found')">
                     <template v-if="state.platforms.length > 0">
                         <el-checkbox-group v-model="state.platforms"> 
                             <template v-for="item in state.platformNames">
@@ -14,35 +14,35 @@
                         </el-checkbox-group>
                     </template>
                     <template v-else>
-                        <span class="red">未找到，请按说明新建文件夹和放入程序</span>
+                        <span class="red">{{ $t('fnpack.notFound') }}</span>
                     </template>
                 </el-descriptions-item>
-                <el-descriptions-item label="目标路径">
+                <el-descriptions-item :label="$t('fnpack.targetPath')">
                     <el-input v-model="state.server"></el-input>
                 </el-descriptions-item>
-                <el-descriptions-item label="多平台">
+                <el-descriptions-item :label="$t('fnpack.multiPlatformLabel')">
                     <div>
                         <p>
-                            在building/platform下新建x86、arm等对应文件夹<br/>
-                            打包时会先清空[{{state.server}}]，再复制文件到[{{state.server}}]<br/>
-                            如果文件夹为空则不清空不复制，仅打包
+                            {{ $t('fnpack.multiPlatformDesc1') }}<br/>
+                            {{ $t('fnpack.multiPlatformDesc2', { server: state.server }) }}<br/>
+                            {{ $t('fnpack.multiPlatformDesc3') }}
                         </p>
                     </div>
                 </el-descriptions-item>
             </template>
             <template v-else>
-                <el-descriptions-item label="说明">
+                <el-descriptions-item :label="$t('fnpack.description')">
                     <div>
-                        仅打包manifest中platform指定的平台
+                        {{ $t('fnpack.singlePlatformDesc') }}
                     </div>
                 </el-descriptions-item>
             </template>
             <el-descriptions-item>
                 <div class="flex">
-                    <el-button plain type="primary" @click="handleBuild" :loading="state.loading">开始打包</el-button>
+                    <el-button plain type="primary" @click="handleBuild" :loading="state.loading">{{ $t('fnpack.startBuild') }}</el-button>
                     <span class="flex-1"></span>
-                    <el-checkbox label="打包后下载" v-model="state.download" />
-                    <el-checkbox label="放到用户空间" v-model="state.uspace" />
+                    <el-checkbox :label="$t('fnpack.downloadAfterPack')" v-model="state.download" />
+                    <el-checkbox :label="$t('fnpack.putUserSpace')" v-model="state.uspace" />
                 </div>
             </el-descriptions-item>
         </el-descriptions>
@@ -55,6 +55,7 @@ import { useLogger } from '../../logger';
 import { useProjects } from '../list';
 import { ElMessage, ElNotification } from 'element-plus';
 import { onMounted, reactive } from 'vue';
+import { t } from '@/i18n';
 
 export default {
     match:/fnpack$/,
@@ -121,12 +122,12 @@ export default {
         const handleBuild = async ()=>{
             saveSettings();
             if(state.platform && state.platforms.length == 0){
-                ElMessage.error('请选择平台');
-                logger.value.error('请选择平台');
+                ElMessage.error(t('fnpack.choosePlatform'));
+                logger.value.error(t('fnpack.choosePlatform'));
                 return false;
             }
             state.loading = true;
-            logger.value.debug('开始打包...');
+            logger.value.debug(t('fnpack.buildStart'));
             fetchProjectPack(name,state.platform ? state.platforms.join(','):'',state.server,`${state.uspace}`)
             .then(async (res)=>{
                 res.forEach(c=>{
@@ -134,8 +135,8 @@ export default {
                         logger.value.success(c.msg);
                         ElNotification({
                             type: 'success',
-                            title: '打包',
-                            message: `[${c.fileName}]打包成功`,
+                            title: t('fnpack.pack'),
+                            message: t('fnpack.packSuccess', { fileName: c.fileName }),
                             duration:3000,
                         });
                         if(state.download){
@@ -145,8 +146,8 @@ export default {
                     }else{
                         ElNotification({
                             type: 'error',
-                            title: '打包',
-                            message: `[${c.fileName}]打包失败`,
+                            title: t('fnpack.pack'),
+                            message: t('fnpack.packFailed', { fileName: c.fileName }),
                             duration:3000,
                         });
                         logger.value.error(c.msg);
@@ -156,7 +157,7 @@ export default {
                 
             }).catch((e)=>{
                 logger.value.error(`${e}`);
-                ElMessage.error('打包失败');
+                ElMessage.error(t('fnpack.buildFailed'));
             }).finally(()=>{
                 state.loading = false;
             });
@@ -174,7 +175,7 @@ export default {
                 state.platform = state.platforms.length>0 && state.platform;
             }).catch(e=>{
                 logger.value.error(`${e}`);
-                ElMessage.error('获取平台失败');
+                ElMessage.error(t('fnpack.getPlatformFailed'));
             });
         }
         onMounted(()=>{

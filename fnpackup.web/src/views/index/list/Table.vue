@@ -16,7 +16,7 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="名称">
+                    <el-table-column prop="name" :label="$t('project.name')">
                         <template #default="scope">
                             <div class="name">
                                 <template v-if="scope.row.if">
@@ -30,7 +30,7 @@
                         </template>
                     </el-table-column>
                     
-                    <el-table-column prop="remark" label="描述">
+                    <el-table-column prop="remark" :label="$t('project.description')">
                         <template #default="scope">
                             <template v-if="scope.row.doc">
                                 <a :href="scope.row.doc" target="_blank" class="a-doc">{{ scope.row.remark }}</a>
@@ -40,9 +40,9 @@
                             </template>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="size" label="大小" width="140"/>
-                    <el-table-column prop="lwt" label="修改时间" width="140" />
-                    <el-table-column prop="ct" label="创建时间" width="140" />
+                    <el-table-column prop="size" :label="$t('project.size')" width="140"/>
+                    <el-table-column prop="lwt" :label="$t('project.modifiedAt')" width="140" />
+                    <el-table-column prop="ct" :label="$t('project.createdAt')" width="140" />
                 </el-table>
             </div>
         </div>
@@ -64,6 +64,7 @@ import {EditPen,Document,Folder} from '@element-plus/icons-vue'
 import { useProjects } from './list';
 import ContextMenu from './ContextMenu.vue';
 import { useLogger } from '../logger';
+import { t } from '@/i18n';
 export default {
     components:{EditPen,Document,Folder,ContextMenu},
     setup () {
@@ -83,7 +84,7 @@ export default {
         ]
         const handleOpen = (row,cell)=>{
             if(excludeEditor.some(e=>e.test(`${projects.value.page.path}/${row.name}`))){
-                logger.value.error(`${`${projects.value.page.path}/${row.name}`} 不可编辑`)
+                logger.value.error(t('project.notEditable', { path: `${projects.value.page.path}/${row.name}` }))
                 return;
             }
             if(row.if==false){

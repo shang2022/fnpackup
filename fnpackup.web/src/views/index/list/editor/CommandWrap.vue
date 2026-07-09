@@ -24,6 +24,7 @@ import { useLogger } from '../../logger';
 import { useProjects } from '../list';
 import { fetchFileRead } from '@/api/api';
 import Source from './Source.vue';
+import { t } from '@/i18n';
 export default {
     match:/\/cmd/,
     width:900,
@@ -42,15 +43,15 @@ export default {
 
             type:'',
             types:[
-                {label:'主脚本',key:'main'},
-                {label:'安装',key:'install_init'},
-                {label:'安装回调',key:'install_callback'},
-                {label:'卸载',key:'uninstall_init'},
-                {label:'卸载回调',key:'uninstall_callback'},
-                {label:'更新',key:'upgrade_init'},
-                {label:'更新回调',key:'upgrade_callback'},
-                {label:'配置',key:'config_init'},
-                {label:'配置回调',key:'config_callback'},
+                {label:t('editor.commandTabs.main'),key:'main'},
+                {label:t('editor.commandTabs.install'),key:'install_init'},
+                {label:t('editor.commandTabs.installCallback'),key:'install_callback'},
+                {label:t('editor.commandTabs.uninstall'),key:'uninstall_init'},
+                {label:t('editor.commandTabs.uninstallCallback'),key:'uninstall_callback'},
+                {label:t('editor.commandTabs.upgrade'),key:'upgrade_init'},
+                {label:t('editor.commandTabs.upgradeCallback'),key:'upgrade_callback'},
+                {label:t('editor.commandTabs.config'),key:'config_init'},
+                {label:t('editor.commandTabs.configCallback'),key:'config_callback'},
             ],
             loading:false,
             contents:{},

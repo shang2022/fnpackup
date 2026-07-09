@@ -17,7 +17,7 @@
                     <template v-else>
                         <el-form-item label-width="0" >
                             <div class="t-c w-100 mgt-1">
-                                <el-button plain @click="handleAddField(step,0)">添加字段</el-button>
+                                <el-button plain @click="handleAddField(step,0)">{{ $t('wizard.addField') }}</el-button>
                             </div>
                         </el-form-item>
                     </template>
@@ -38,6 +38,7 @@ import WizardSwitch from './WizardSwitch.vue';
 import WizardTips from './WizardTips.vue';
 import WizardValidate from './WizardValidate.vue';
 import WizardPlusField from './WizardPlusField.vue';
+import { t } from '@/i18n';
 export default {
     props: ['type','path','content'],
     components: { Edit,CircleCloseFilled,CirclePlusFilled,WizardValidate,WizardPlusField },
@@ -46,24 +47,24 @@ export default {
         const logger = useLogger();
 
         const validateTypes = [
-            {label: '必填',value: 'required',default:{_required:true}},
-            {label: '范围',value: 'min',default:{_min:0,_max:0}},
-            {label: '长度',value: 'len',default:{_len:0}},
-            {label: '正则',value: 'pattern',default:{_pattern:''}},
+            {label: t('wizard.required'),value: 'required',default:{_required:true}},
+            {label: t('wizard.range'),value: 'min',default:{_min:0,_max:0}},
+            {label: t('wizard.length'),value: 'len',default:{_len:0}},
+            {label: t('wizard.pattern'),value: 'pattern',default:{_pattern:''}},
         ];
         const types = [
-            {label:'文本框',value:'text',default:'',field:'initValue'},
-            {label:'密码框',value:'password',default:'',field:'initValue'},
-            {label:'单选按钮',value:'radio',default:'',field:'initValue'},
-            {label:'多选框',value:'checkbox',default:[],field:'initValue'},
-            {label:'下拉框',value:'select',default:'',field:'initValue'},
-            {label:'开关',value:'switch',default:true,field:'initValue',init:(value)=>{ return value == 'true' },format:(value)=>{return value.toString()}},
-            {label:'提示文本',value:'tips',default:'',field:'helpText'},
+            {label:t('wizard.text'),value:'text',default:'',field:'initValue'},
+            {label:t('wizard.password'),value:'password',default:'',field:'initValue'},
+            {label:t('wizard.radio'),value:'radio',default:'',field:'initValue'},
+            {label:t('wizard.checkbox'),value:'checkbox',default:[],field:'initValue'},
+            {label:t('wizard.select'),value:'select',default:'',field:'initValue'},
+            {label:t('wizard.switch'),value:'switch',default:true,field:'initValue',init:(value)=>{ return value == 'true' },format:(value)=>{return value.toString()}},
+            {label:t('wizard.tips'),value:'tips',default:'',field:'helpText'},
         ];
         const defaultItem = Object.assign({
             type:'text',
             field:'wizard_default',
-            label:'示例项',
+            label:t('wizard.defaultItem'),
             rules:[],
             options:[]
         }, types.reduce((json,item)=>{
@@ -71,7 +72,7 @@ export default {
             return json;
         },{}));
 
-        const _default = JSON.parse(props.content == '[]' ? JSON.stringify([{'stepTitle':'欢迎使用','items':[]}]) : props.content);
+        const _default = JSON.parse(props.content == '[]' ? JSON.stringify([{'stepTitle':t('wizard.defaultStep'),'items':[]}]) : props.content);
         
         _default.forEach((step,index)=>{
             step._id = index;
@@ -109,9 +110,9 @@ export default {
 
         const handleStepEdit = (_id,action) => {
             if(action == 'add'){
-                ElMessageBox.prompt('请输入步骤标题','添加步骤',{
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                ElMessageBox.prompt(t('wizard.addStepPrompt'),t('wizard.addStep'),{
+                    confirmButtonText: t('common.ok'),
+                    cancelButtonText: t('common.cancel'),
                     draggable:true,
                     customStyle: {
                         'vertical-align':'unset'
@@ -130,9 +131,9 @@ export default {
                     logger.value.error(`${e}`);
                 });
             }else if(action == 'remove'){
-                ElMessageBox.confirm('确定要删除该步骤吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                ElMessageBox.confirm(t('wizard.deleteStepConfirm'), t('common.tips'), {
+                    confirmButtonText: t('common.ok'),
+                    cancelButtonText: t('common.cancel'),
                     type: 'warning',
                     draggable:true,
                     customStyle: {
@@ -154,9 +155,9 @@ export default {
                 step.items.splice(index,1);
                 return;
             }
-            ElMessageBox.confirm(`确定要删除[${step.items[index].field}]字段吗？`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            ElMessageBox.confirm(t('wizard.deleteFieldConfirm', { field: step.items[index].field }), t('common.tips'), {
+                confirmButtonText: t('common.ok'),
+                cancelButtonText: t('common.cancel'),
                 type: 'warning',
                 draggable:true,
                 customStyle: {
@@ -188,14 +189,14 @@ export default {
                         });
                     }
                     
-                    //删除步骤的辅助字段
+                    // Remove helper fields from the step.
                     deleteField(step);
 
                     const items = step.items;
                     delete step.items;
                     step.items = items;
                     step.items.forEach(item=>{
-                        //删除字段的辅助字段，每个字段类型有一个单独的初始值辅助字段
+                        // Remove helper fields from the item. Each item type owns one initial-value helper.
                         types.forEach(type=>{
                             if(type.field !== 'helpText')
                                 delete item[type.field];
@@ -207,8 +208,7 @@ export default {
                         }
                         deleteField(item);
 
-                        //删除验证的辅助字段，并将对应不同类型的辅助字段的值还原到真正字段
-                        //1.比如{required:true,_requred:true,message:'',_required_message:'111'}->{required:true,message:'11'}
+                        // Remove validation helpers and restore type-specific values to real fields.
                         item.rules = item.rules.reduce((arr,rule)=>{
                             const keys = Object.keys(validateTypes.filter(c=>c.value == rule._type)[0].default);
                             arr.push(Object.assign(keys.reduce((json,value)=>{

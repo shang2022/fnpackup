@@ -26,6 +26,7 @@
 import { fetchFileRead } from '@/api/api';
 import { onMounted, reactive } from 'vue';
 import { useProjects } from '../list';
+import { t } from '@/i18n';
 
 export default {
     match:/env$/,
@@ -36,188 +37,188 @@ export default {
         const state = reactive({
             list:[
                 {
-                    "title": "基本信息",
+                    "title": t('env.basic'),
                     "items": [
                         {
                             "value": "${TRIM_APPNAME}",
-                            "label": "应用的名称（来自 manifest 中的 appname）"
+                            "label": t('env.appname')
                         },
                         {
                             "value": "${TRIM_APPVER}",
-                            "label": "应用的版本号（来自 manifest 中的 version）"
+                            "label": t('env.version')
                         },
                         {
                             "value": "${TRIM_OLD_APPVER}",
-                            "label": "应用升级前的版本号（仅在升级时可用）"
+                            "label": t('env.oldVersion')
                         }
                     ]
                 },
                 {
-                    "title": "路径信息",
+                    "title": t('env.pathInfo'),
                     "items": [
                         {
                             "value": "${TRIM_APPDEST}",
-                            "label": "应用可执行文件目录路径（target 文件夹）"
+                            "label": t('env.appDest')
                         },
                         {
                             "value": "${TRIM_PKGETC}",
-                            "label": "配置文件目录路径（etc 文件夹）"
+                            "label": t('env.pkgEtc')
                         },
                         {
                             "value": "${TRIM_PKGVAR}",
-                            "label": "动态数据目录路径（var 文件夹）"
+                            "label": t('env.pkgVar')
                         },
                         {
                             "value": "${TRIM_PKGTMP}",
-                            "label": "临时文件目录路径（tmp 文件夹）"
+                            "label": t('env.pkgTmp')
                         },
                         {
                             "value": "${TRIM_PKGHOME}",
-                            "label": "用户数据目录路径（home 文件夹）"
+                            "label": t('env.pkgHome')
                         },
                         {
                             "value": "${TRIM_PKGMETA}",
-                            "label": "元数据目录路径（meta 文件夹）"
+                            "label": t('env.pkgMeta')
                         },
                         {
                             "value": "${TRIM_APPDEST_VOL}",
-                            "label": "应用安装的存储空间路径"
+                            "label": t('env.appDestVol')
                         }
                     ]
                 },
                 {
-                    "title": "网络和端口",
+                    "title": t('env.network'),
                     "items": [
                         {
                             "value": "${TRIM_SERVICE_PORT}",
-                            "label": "应用监听的端口号（来自 manifest 中的 service_port）"
+                            "label": t('env.servicePort')
                         }
                     ]
                 },
                 {
-                    "title": "用户和权限",
+                    "title": t('env.userPermission'),
                     "items": [
                         {
                             "value": "${TRIM_USERNAME}",
-                            "label": "应用专用用户名"
+                            "label": t('env.username')
                         },
                         {
                             "value": "${TRIM_GROUPNAME}",
-                            "label": "应用专用用户组名"
+                            "label": t('env.groupname')
                         },
                         {
                             "value": "${TRIM_UID}",
-                            "label": "应用用户 ID"
+                            "label": t('env.uid')
                         },
                         {
                             "value": "${TRIM_GID}",
-                            "label": "应用用户组 ID"
+                            "label": t('env.gid')
                         },
                         {
                             "value": "${TRIM_RUN_USERNAME}",
-                            "label": "当前执行脚本的用户名（可能是 root 或应用用户）"
+                            "label": t('env.runUsername')
                         },
                         {
                             "value": "${TRIM_RUN_GROUPNAME}",
-                            "label": "当前执行脚本的用户组名"
+                            "label": t('env.runGroupname')
                         },
                         {
                             "value": "${TRIM_RUN_UID}",
-                            "label": "当前执行脚本的用户 ID"
+                            "label": t('env.runUid')
                         },
                         {
                             "value": "${TRIM_RUN_GID}",
-                            "label": "当前执行脚本的用户组 ID"
+                            "label": t('env.runGid')
                         }
                     ]
                 },
                 {
-                    "title": "数据共享",
+                    "title": t('env.dataShare'),
                     "items": [
                         {
                             "value": "${TRIM_DATA_SHARE_PATHS}",
-                            "label": "数据共享路径列表，多个路径用冒号分隔"
+                            "label": t('env.dataSharePaths')
                         }
                     ]
                 },
                 {
-                    "title": "临时日志",
+                    "title": t('env.tempLog'),
                     "items": [
                         {
                             "value": "${TRIM_TEMP_LOGFILE}",
-                            "label": "系统日志文件路径（用户可见的日志）"
+                            "label": t('env.tempLogfile')
                         },
                         {
                             "value": "${TRIM_TEMP_UPGRADE_FOLDER}",
-                            "label": "升级过程的临时目录"
+                            "label": t('env.tempUpgradeFolder')
                         },
                         {
                             "value": "${TRIM_PKGINST_TEMP_DIR}",
-                            "label": "安装包解压的临时目录"
+                            "label": t('env.pkginstTempDir')
                         },
                         {
                             "value": "${TRIM_TEMP_TPKFILE}",
-                            "label": "fpk 包解压目录"
+                            "label": t('env.tempTpkfile')
                         }
                     ]
                 },
                 {
-                    "title": "CMD 脚本",
+                    "title": t('env.cmdScript'),
                     "items": [
                         {
                             "value": "${TRIM_APP_STATUS}",
-                            "label": "当前状态(INSTALL、START、UPGRADE、UNINSTALL、STOP、CONFIG等)"
+                            "label": t('env.appStatus')
                         }
                     ]
                 },
                 {
-                    "title": "获取授权目录列表}",
+                    "title": t('env.authPath'),
                     "items": [
                         {
                             "value": "${TRIM_DATA_ACCESSIBLE_PATHS}",
-                            "label": "可访问路径列表，多个路径用冒号分隔，仅返回读写/只读的目录"
+                            "label": t('env.dataAccessiblePaths')
                         }
                     ]
                 },
                 {
-                    "title": "版本信息",
+                    "title": t('env.versionInfo'),
                     "items": [
                         {
                             "value": "${TRIM_SYS_VERSION}",
-                            "label": "完整的系统版本号"
+                            "label": t('env.sysVersion')
                         },
                         {
                             "value": "${TRIM_SYS_VERSION_MAJOR}",
-                            "label": "系统主版本号"
+                            "label": t('env.sysVersionMajor')
                         },
                         {
                             "value": "${TRIM_SYS_VERSION_MINOR}",
-                            "label": "系统次版本号"
+                            "label": t('env.sysVersionMinor')
                         },
                         {
                             "value": "${TRIM_SYS_VERSION_BUILD}",
-                            "label": "系统构建版本号"
+                            "label": t('env.sysVersionBuild')
                         }
                     ]
                 },
                 {
-                    "title": "系统特征",
+                    "title": t('env.sysFeature'),
                     "items": [
                         {
                             "value": "${TRIM_SYS_ARCH}",
-                            "label": "系统 CPU 架构（如 x86_64）"
+                            "label": t('env.sysArch')
                         },
                         {
                             "value": "${TRIM_KERNEL_VERSION}",
-                            "label": "系统内核版本号"
+                            "label": t('env.kernelVersion')
                         },
                         {
                             "value": "${TRIM_SYS_MACHINE_ID}",
-                            "label": "设备的唯一标识符"
+                            "label": t('env.machineId')
                         },
                         {
                             "value": "${TRIM_SYS_LANGUAGE}",
-                            "label": "系统语言设置"
+                            "label": t('env.sysLanguage')
                         }
                     ]
                 }
@@ -259,10 +260,10 @@ export default {
         }
         const getWizards = () => {
             return Promise.all([
-                getWizard('install','安装向导'),
-                getWizard('uninstall','卸载向导'),
-                getWizard('upgrade','升级向导'),
-                getWizard('config','配置向导')
+                getWizard('install',t('wizard.install')),
+                getWizard('uninstall',t('wizard.uninstall')),
+                getWizard('upgrade',t('wizard.upgrade')),
+                getWizard('config',t('wizard.config'))
             ]).then(res=>{
                 state.wizards = res.filter(c=>c).reduce((arr,item)=>{
                     arr.push(...item);

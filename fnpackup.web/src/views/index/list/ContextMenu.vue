@@ -1,46 +1,46 @@
 <template>
     <div class="context-menu-wrap" :style="{left:`${projects.contextMenu.x+4}px`,top:`${projects.contextMenu.y+4}px`}">
-        <a href="javascript:;" @click="handleRefresh"><el-icon><Refresh/></el-icon> 刷新</a>
+        <a href="javascript:;" @click="handleRefresh"><el-icon><Refresh/></el-icon> {{ $t('context.refresh') }}</a>
         <a href="javascript:;" v-if="hasInProject">
             <div class="item">
-                <span><el-icon><More/></el-icon>目录</span>
+                <span><el-icon><More/></el-icon>{{ $t('context.directory') }}</span>
                 <span class="flex-1"></span>
                 <el-icon><ArrowRight/></el-icon>
             </div>
             <div class="sub">
-                <a href="javascript:;" @click="handleBack"><el-icon><Back/></el-icon>回上一级</a>
-                <a href="javascript:;" @click="handleHome"><el-icon><Back/></el-icon>回应用列表</a>
+                <a href="javascript:;" @click="handleBack"><el-icon><Back/></el-icon>{{ $t('context.backParent') }}</a>
+                <a href="javascript:;" @click="handleHome"><el-icon><Back/></el-icon>{{ $t('context.backAppList') }}</a>
             </div>
         </a>
         <template v-if="canRun">
-            <a href="javascript:;" @click="handleRun"><el-icon><VideoPlay/></el-icon>运行</a>
+            <a href="javascript:;" @click="handleRun"><el-icon><VideoPlay/></el-icon>{{ $t('context.run') }}</a>
         </template>
         <template v-if="hasInProject">
-            <a href="javascript:;" @click="handleUpload('*/*')"><el-icon><Upload/></el-icon>上传</a>
+            <a href="javascript:;" @click="handleUpload('*/*')"><el-icon><Upload/></el-icon>{{ $t('context.upload') }}</a>
         </template>
-        <a href="javascript:;" @click="handleDownload"><el-icon><Download/></el-icon>下载</a>
-        <a href="javascript:;" v-if="canSource" @click="handleSource"><el-icon><Edit/></el-icon>源码编辑</a>
-        <a href="javascript:;" v-if="canRename" @click="handleRename"><el-icon><EditPen/></el-icon>重命名</a>
+        <a href="javascript:;" @click="handleDownload"><el-icon><Download/></el-icon>{{ $t('context.download') }}</a>
+        <a href="javascript:;" v-if="canSource" @click="handleSource"><el-icon><Edit/></el-icon>{{ $t('context.sourceEdit') }}</a>
+        <a href="javascript:;" v-if="canRename" @click="handleRename"><el-icon><EditPen/></el-icon>{{ $t('context.rename') }}</a>
         <a href="javascript:;">
             <div class="item">
-                <span><el-icon><Plus/></el-icon>新建</span>
+                <span><el-icon><Plus/></el-icon>{{ $t('context.create') }}</span>
                 <span class="flex-1"></span>
                 <el-icon><ArrowRight/></el-icon>
             </div>
             <div class="sub">
                 <template v-if="hasInProject">
-                    <a href="javascript:;" @click="handleCreateFile(true)"><el-icon><DocumentAdd/></el-icon>新建文件</a>
-                    <a href="javascript:;" @click="handleCreateFile(false)"><el-icon><FolderAdd/></el-icon>新建文件夹</a>
+                    <a href="javascript:;" @click="handleCreateFile(true)"><el-icon><DocumentAdd/></el-icon>{{ $t('context.newFile') }}</a>
+                    <a href="javascript:;" @click="handleCreateFile(false)"><el-icon><FolderAdd/></el-icon>{{ $t('context.newFolder') }}</a>
                 </template>
                 <template v-else>
-                    <a href="javascript:;" @click="handleCreate()"><el-icon><Plus/></el-icon>创建应用</a>
-                    <a href="javascript:;" @click="handleUpload('.fpk')"><el-icon><Upload/></el-icon>导入fpk</a>
+                    <a href="javascript:;" @click="handleCreate()"><el-icon><Plus/></el-icon>{{ $t('action.createApp') }}</a>
+                    <a href="javascript:;" @click="handleUpload('.fpk')"><el-icon><Upload/></el-icon>{{ $t('action.importFpk') }}</a>
                 </template>
             </div>
         </a>
         
         <template v-if="projects.contextMenu.row">
-            <a href="javascript:;" class="red" @click="handleDel"><el-icon><Delete/></el-icon>删除</a>
+            <a href="javascript:;" class="red" @click="handleDel"><el-icon><Delete/></el-icon>{{ $t('context.delete') }}</a>
         </template>
     </div>
 </template>
@@ -52,6 +52,7 @@ import { computed, onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { useLogger } from '../logger';
 import { fetchFileCreate, fetchFileDelete, fetchFileRename, fetchProjectBuild } from '@/api/api';
+import { t } from '@/i18n';
 export default {
     components: {Refresh,Upload,Download,DocumentAdd,FolderAdd,Delete,EditPen,Plus,Back,ArrowRight,More,Edit,VideoPlay},
     setup () {
@@ -108,9 +109,9 @@ export default {
             document.body.removeChild(a);
         }
         const handleCreateFile = (isFile)=>{
-            ElMessageBox.prompt('输入名称', `新建${isFile?'文件':'文件夹'}`, {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
+            ElMessageBox.prompt(t('common.inputName'), isFile ? t('context.newFile') : t('context.newFolder'), {
+                confirmButtonText: t('common.confirm'),
+                cancelButtonText: t('common.cancel'),
                 draggable:true,
                 customStyle: {
                     'vertical-align':'unset'
@@ -124,7 +125,7 @@ export default {
                     if(res){
                         logger.value.error(res);
                     }else{
-                        logger.value.success(`[${value}]创建成功`);
+                        logger.value.success(t('common.createSuccess', { name: value }));
                         projects.value.load(); 
                     }
                 });
@@ -133,9 +134,9 @@ export default {
             });
         }
         const handleRename = ()=>{
-            ElMessageBox.prompt('输入名称', '重命名', {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
+            ElMessageBox.prompt(t('common.inputName'), t('context.rename'), {
+                confirmButtonText: t('common.confirm'),
+                cancelButtonText: t('common.cancel'),
                 inputValue: projects.value.contextMenu.row.name,
                 draggable:true,
                 customStyle: {
@@ -151,7 +152,7 @@ export default {
                     if(res){
                         logger.value.error(res);
                     }else{
-                        logger.value.success(`[${projects.value.contextMenu.row.name}]重命名成功`);
+                        logger.value.success(t('common.renameSuccess', { name: projects.value.contextMenu.row.name }));
                         projects.value.load(); 
                     }
                 }).catch((e)=>{
@@ -162,9 +163,9 @@ export default {
             });
         }
         const handleDel = ()=>{
-            ElMessageBox.confirm('确定要删除吗？', '提示', {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
+            ElMessageBox.confirm(t('common.deleteConfirm'), t('common.tips'), {
+                confirmButtonText: t('common.confirm'),
+                cancelButtonText: t('common.cancel'),
                 type: 'warning',
                 draggable:true,
                 customStyle: {
@@ -176,7 +177,7 @@ export default {
                     if(res){
                         logger.value.error(res);
                     }else{
-                        logger.value.success(`[${projects.value.contextMenu.row.name}]删除成功`);
+                        logger.value.success(t('common.deleteSuccess', { name: projects.value.contextMenu.row.name }));
                         projects.value.load(); 
                     }
                 }).catch((e)=>{

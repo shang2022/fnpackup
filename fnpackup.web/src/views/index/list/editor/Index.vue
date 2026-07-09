@@ -5,10 +5,10 @@
         <template #header>
             <div class="header">
                 <template v-if="state.changed">
-                    <span class="red">编辑器[{{ projects.editor.remark }}] <strong >*</strong> </span>
+                    <span class="red">{{ $t('editor.title', { remark: projects.editor.remark }) }} <strong >*</strong> </span>
                 </template>
                 <template v-else>
-                    <span>编辑器[{{ projects.editor.remark }}]</span>
+                    <span>{{ $t('editor.title', { remark: projects.editor.remark }) }}</span>
                 </template>
             </div>
         </template>
@@ -17,8 +17,8 @@
                 <Editor :path="projects.editor.path" ref="editor"></Editor>
             </div>
             <div class="t-c mgt-1">
-                <el-button @click="handleCancel" :loading="state.loading">取消</el-button>
-                <el-button  v-if="state.showSave" type="primary" @click="handleSave" :loading="state.loading">保存当前修改</el-button>
+                <el-button @click="handleCancel" :loading="state.loading">{{ $t('common.cancel') }}</el-button>
+                <el-button  v-if="state.showSave" type="primary" @click="handleSave" :loading="state.loading">{{ $t('editor.saveCurrent') }}</el-button>
             </div>
         </template>
     </el-dialog>
@@ -31,6 +31,7 @@ import Editor from './Editor.vue';
 import { fetchFileWrite } from '@/api/api';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useLogger } from '../../logger';
+import { t } from '@/i18n';
 export default {
     components:{Editor},
     props:['modelValue'],
@@ -57,9 +58,9 @@ export default {
 
         const handleCancel = () => {
             if(state.changed){
-                ElMessageBox.confirm('存在尚未保存的修改，是否保存？', '提示', {
-                    confirmButtonText: '保存关闭',
-                    cancelButtonText: '直接关闭',
+                ElMessageBox.confirm(t('common.unsavedConfirm'), t('common.tips'), {
+                    confirmButtonText: t('common.saveAndClose'),
+                    cancelButtonText: t('common.closeDirectly'),
                     type: 'warning',
                     draggable:true,
                     customStyle: {
@@ -88,13 +89,13 @@ export default {
                     fetchFileWrite(res.path,res.content)
                     .then((msg)=>{
                         if(msg){
-                            ElMessage.error('保存失败');
+                            ElMessage.error(t('common.saveFailed'));
                             logger.value.error(msg);
                             reject();
                         }else{
                             state.content = res.content;
-                            ElMessage.success('保存成功');
-                            logger.value.success(`[${res.path}]保存成功`);
+                            ElMessage.success(t('common.saveSuccess'));
+                            logger.value.success(`[${res.path}]${t('common.saveSuccess')}`);
                             if(setChangedContent && res.changed_key){
                                 setChangedContent(res.changed_key,res.content);
                             }
@@ -103,7 +104,7 @@ export default {
                         }
                     }).catch(()=>{
                         reject();
-                        ElMessage.error('操作失败');
+                        ElMessage.error(t('common.operationFailed'));
                     }).finally(()=>{
                         state.loading = false;
                     });

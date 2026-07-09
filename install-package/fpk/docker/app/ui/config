@@ -1,7 +1,7 @@
 {
     ".url": {
         "fnpackup.proxy.Application": {
-            "title": "在线fpk",
+            "title": "${entry.title}",
             "icon": "images/icon_{0}.png",
             "type": "iframe",
             "protocol": "http",

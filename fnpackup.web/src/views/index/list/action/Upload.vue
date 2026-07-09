@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="state.show" :title="projects.editor.mime == '.fpk'?'导入fpk应用':'上传文件到当前目录'" width="340" :close-on-click-modal="false" :close-on-press-escape="false"  draggable>
+    <el-dialog v-model="state.show" :title="projects.editor.mime == '.fpk'?$t('upload.importFpkApp'):$t('upload.uploadToCurrentDir')" width="340" :close-on-click-modal="false" :close-on-press-escape="false"  draggable>
         <div class="upload-wrap" ref="drag">
             <div class="inner"> 
                 <template v-if="state.loading">
@@ -7,13 +7,13 @@
                 </template>
                 <template v-else>
                     <p>
-                        <el-button plain @click="triggerSelectFile"><el-icon><Document /></el-icon>上传文件</el-button>
+                        <el-button plain @click="triggerSelectFile"><el-icon><Document /></el-icon>{{ $t('upload.uploadFile') }}</el-button>
                     </p>
                     <p v-if="projects.editor.mime != '.fpk'">
-                        <el-button plain @click="triggerSelectFolder"><el-icon><Folder /></el-icon>上传文件夹</el-button>
+                        <el-button plain @click="triggerSelectFolder"><el-icon><Folder /></el-icon>{{ $t('upload.uploadFolder') }}</el-button>
                     </p>
-                    <p v-if="projects.editor.mime != '.fpk'">点击选择或拖拽文件/文件夹到此处</p>
-                    <p v-if="projects.editor.mime == '.fpk'">上传.fpk文件导入应用</p>
+                    <p v-if="projects.editor.mime != '.fpk'">{{ $t('upload.dropFiles') }}</p>
+                    <p v-if="projects.editor.mime == '.fpk'">{{ $t('upload.uploadFpk') }}</p>
                 </template>
             </div>
             <div class="drag" v-if="state.draging"></div>
@@ -30,6 +30,7 @@ import { useLogger } from '../../logger';
 import { useProjects } from '../list';
 import {fetchFileUpload} from '@/api/api'
 import { ElNotification } from 'element-plus';
+import { t } from '@/i18n';
 export default {
     props: ['modelValue'],
     emits: ['update:modelValue'],
@@ -69,11 +70,11 @@ export default {
                 if(index > files.length-1){
                     setTimeout(() => {
                         state.loading = false;
-                        logger.value.success(`已上传${files.length}个文件`);
+                        logger.value.success(t('common.uploadedFiles', { count: files.length }));
                         ElNotification({
                             type: 'success',
-                            title: '文件上传',
-                            message: `已上传${files.length}个文件`,
+                            title: t('common.fileUpload'),
+                            message: t('common.uploadedFiles', { count: files.length }),
                             duration:3000,
                         });
                     }, 1000);
@@ -93,12 +94,12 @@ export default {
                         });
                     }else{
                         state.process.progress = `100%`;
-                        logger.value.success(`已上传:${fileObj.file.name}`);
+                        logger.value.success(t('common.uploadedFile', { name: fileObj.file.name }));
                         nextTick(()=>{
                             ElNotification({
                                 type: 'success',
-                                title: '文件上传',
-                                message: `已上传:${fileObj.file.name}`,
+                                title: t('common.fileUpload'),
+                                message: t('common.uploadedFile', { name: fileObj.file.name }),
                                 duration:3000,
                             });
                         });

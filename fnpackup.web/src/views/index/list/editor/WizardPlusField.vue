@@ -2,7 +2,7 @@
     <el-form-item label-width="0" class="mgb-1">
         <el-row class="w-100">
             <el-col :span="23">
-                <el-form-item label="步骤标题">
+                <el-form-item :label="$t('wizard.stepTitle')">
                     <el-input v-model="step.stepTitle"></el-input>
                 </el-form-item>
             </el-col>
@@ -17,12 +17,12 @@
         <el-form-item label-width="0" class="mgb-1">
             <el-row class="w-100">
                 <el-col :span="11">
-                    <el-form-item :label="`字段${index}`" label-width="80">
+                    <el-form-item :label="$t('wizard.fieldIndex', { index })" label-width="80">
                         <el-input v-model="plus.field"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="10">
-                    <el-form-item label="值" label-width="30">
+                    <el-form-item :label="$t('wizard.value')" label-width="30">
                         <el-input v-model="plus.value"></el-input>
                     </el-form-item>
                 </el-col>
@@ -41,6 +41,7 @@
 import { Delete,Plus } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus';
 import { useLogger } from '../../logger';
+import { t } from '@/i18n';
 export default {
     props: ['step'],
     components:{ Delete,Plus},
@@ -50,9 +51,9 @@ export default {
             props.step._plus_field.splice(index,0,{'field':'field_name',value:''});
         }
         const handleDel = (index)=>{
-            ElMessageBox.confirm('确定要删除吗？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            ElMessageBox.confirm(t('common.deleteConfirm'), t('common.tips'), {
+                confirmButtonText: t('common.ok'),
+                cancelButtonText: t('common.cancel'),
                 type: 'warning',
             }).then(() => {
                 props.step._plus_field.splice(index,1);

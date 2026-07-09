@@ -1,48 +1,8 @@
 import { inject, provide, ref, watch } from "vue";
 import { useLogger } from "../logger";
 import { fetchFileList } from "@/api/api";
+import { t, tm } from "@/i18n";
 
-
-const remarks = {
-    'app':'应用目录，放你的程序和程序UI/入口',
-    'app/docker':'Docker应用独有目录',
-    'app/server':'原生应用独有目录',
-    'app/www':'原生应用独有目录',
-    'app/ui':'UI入口配置',
-    'app/ui/images':'UI入口配置图片',
-    'app/ui/images/icon_256.png':'UI入口大图标，一般256x256px',
-    'app/ui/images/icon_64.png':'UI入口大图标，一般64x64px',
-    'app/ui/config':'UI入口配置文件',
-    'cmd':'应用配置/安装/升级/卸载脚本',
-    'cmd/config_callback':'应用配置后执行脚本',
-    'cmd/config_init':'应用配置前执行脚本',
-    'cmd/install_callback':'应用安装后执行脚本',
-    'cmd/install_init':'应用安装前脚本',
-    'cmd/main':'应用启动/停止/状态检查脚本',
-    'cmd/uninstall_callback':'应用卸载后执行脚本',
-    'cmd/uninstall_init':'应用卸载前脚本',
-    'cmd/upgrade_callback':'应用升级后执行脚本',
-    'cmd/upgrade_init':'应用升级前脚本',
-    'config':'应用权限/资源',
-    'config/privilege':'应用权限清单配置',
-    'config/resource':'应用资源清单配置',
-    
-    'wizard':'应用安装/卸载向导',
-    'wizard/install':'应用安装时UI',
-    'wizard/uninstall':'应用卸载时UI',
-    'wizard/upgrade':'应用升级时UI',
-    'wizard/config':'应用配置时UI',
-    'ICON_256.PNG':'应用大图标，一般256x256px',
-    'ICON.PNG':'应用小图标，一般64x64px',
-    'LICENSE':'用户安装前需要同意的隐私协议（可选）',
-    'manifest':'应用信息清单',
-
-    'building':'应用构建',
-    'building/building':'应用构建配置',
-
-    'i18n':'国际化',
-
-}
 const documents = [
     {match:/^manifest$/,url:'https://developer.fnnas.com/docs/core-concepts/manifest'},
     {match:/app\/docker/,url:'https://developer.fnnas.com/docs/core-concepts/docker'},
@@ -144,13 +104,13 @@ export const provideProjects = () => {
                     const paths = `${this.page.path}/${c.name}`.split('/').filter(c=>c);
                     c.remark = paths.filter((item,index)=>index>1).join('/');
                     c.doc = (documents.filter(d=>d.match.test(c.remark))[0] || {url:''}).url;
-                    c.remark = remarks[c.remark] || c.remark;
+                    c.remark = tm('project.remarks')[c.remark] || c.remark;
                     c.size = c.if ? sizeFormat(c.size) : '';
                 })
                 this.page.list = json.list;
-                logger.value.success(`[${this.page.path}]文件列表加载成功，${this.page.list.length}/${this.page.count}`);
+                logger.value.success(t('project.loadSuccess', { path: this.page.path, loaded: this.page.list.length, total: this.page.count }));
             }).catch((e)=>{
-                logger.value.error(`文件列表加载失败：${e}`);
+                logger.value.error(t('project.loadFailed', { error: `${e}` }));
                 this.page.loading = false;
             });
         }

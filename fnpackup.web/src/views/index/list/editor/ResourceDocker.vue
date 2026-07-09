@@ -12,12 +12,12 @@
                 <el-form-item label="" label-width="0" class="mgb-0">
                     <el-row class="w-100">
                         <el-col :span="9">
-                            <el-form-item label="名称" label-width="40">
+                            <el-form-item :label="$t('resource.name')" label-width="40">
                                 <el-input v-model="item.name" size="small"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="9">
-                            <el-form-item label="路径" label-width="40">
+                            <el-form-item :label="$t('resource.path')" label-width="40">
                                 <el-input v-model="item.path" size="small"></el-input>
                             </el-form-item>
                         </el-col>
