@@ -12,8 +12,8 @@
                 </li>
             </template>
         </ul>
-        <div class="foot-wrap">
-            <a href="javascript:;" @click="handlePay" v-if="state.showPayMenu">
+        <div class="foot-wrap"  v-if="state.showPayMenu"> 
+            <a href="javascript:;" @click="handlePay">
                 <img src="../assets/money.svg" class="img-big">
                 <span>{{ $t('menu.donate') }}</span>
             </a>

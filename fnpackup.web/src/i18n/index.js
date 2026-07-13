@@ -6,9 +6,6 @@ import enElement from 'element-plus/es/locale/lang/en'
 
 export const currentLocale = document.cookie.includes('language=zh-') ? 'zh-CN' : 'en-US'
 
-console.log(document.cookie);
-console.log(document.cookie.includes('language=zh-'));
-
 export const i18n = createI18n({
   legacy: false,
   globalInjection: true,
