@@ -13,7 +13,7 @@
             </template>
         </ul>
         <div class="foot-wrap">
-            <a href="javascript:;" @click="handlePay">
+            <a href="javascript:;" @click="handlePay" v-if="state.showPayMenu">
                 <img src="../assets/money.svg" class="img-big">
                 <span>{{ $t('menu.donate') }}</span>
             </a>
@@ -68,7 +68,8 @@ export default {
         const state = reactive({
             version: 'v0.0.0',
             showPay:false,
-            pays:[]
+            pays:[],
+            showPayMenu: computed(()=>document.cookie.includes('language=zh-')),
         });
         const setTheme = ()=>{
             const isSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
